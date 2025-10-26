@@ -1,14 +1,13 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Trang chủ | GDU Confession</title>
-  <link rel="stylesheet" href="style.css" />
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
 </head>
 <body class="home-page">
-
   <header>
     <div class="header-container">
       <h1>✨ GIA ĐỊNH UNIVERSITY CONFESSION ✨</h1>
@@ -17,7 +16,6 @@
         <a href="login.html">Đăng nhập</a>
         <a href="register.html">Đăng ký</a>
         <a href="profile.html">Cá nhân</a>
-        <a href="confession.html">Confession</a>
       </nav>
     </div>
   </header>
@@ -27,9 +25,8 @@
       <h2>Confession Online Của Đại Học Gia Định</h2>
       <p>Văn Minh Lên Nhé Các Tình Yêu</p>
       <div class="btn-group">
-        <!-- Cả hai nút là button để dễ quản lý JS -->
         <button class="btn start-btn">Bắt Đầu</button>
-        <button class="btn view-btn">Xem Confession</button>
+        <a href="confession.html" class="btn">Xem Confession</a>
       </div>
     </section>
   </main>
@@ -39,25 +36,17 @@
   </footer>
 
   <script>
-    // Lấy trạng thái đăng nhập
     const isLoggedIn = localStorage.getItem("loggedIn");
 
-    function goToConfession() {
+    document.querySelector(".start-btn").addEventListener("click", () => {
       if (isLoggedIn) {
         window.location.href = "confession.html";
       } else {
         alert("Vui lòng đăng nhập trước khi vào Confession");
         window.location.href = "login.html";
       }
-    }
-
-    // Gán sự kiện cho nút Bắt đầu
-    const startBtn = document.querySelector(".start-btn");
-    if (startBtn) startBtn.addEventListener("click", goToConfession);
-
-    // Gán sự kiện cho nút Xem Confession
-    const viewBtn = document.querySelector(".view-btn");
-    if (viewBtn) viewBtn.addEventListener("click", goToConfession);
+    });
   </script>
 </body>
 </html>
+
