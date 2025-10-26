@@ -382,6 +382,7 @@ body {
   overflow-x: hidden;
 }
 
+
 /* =========================
    HEADER - FIX TITLE TRÀN CHỮ
    ========================= */
@@ -445,6 +446,8 @@ header h1 {
     padding: 6px 10px;
     font-size: 0.9rem;
   }
+}
+
 
 /* =========================
    HEADER
