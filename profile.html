@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Trang cá nhân | GDU Confession</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    /* ===================== GLOBAL RESET ===================== */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    body {
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: linear-gradient(135deg, #0072ff, #00c6ff);
+      color: #fff;
+      overflow-x: hidden;
+    }
+
+    /* ===================== PROFILE CONTAINER ===================== */
+    .profile-container {
+      width: 100%;
+      max-width: 400px;
+      padding: 20px;
+    }
+
+    .profile-box {
+      background: rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(10px);
+      border-radius: 16px;
+      padding: 40px 30px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      text-align: center;
+    }
+
+    .profile-box h2 {
+      font-size: 1.8rem;
+      font-weight: 600;
+    }
+
+    .info {
+      text-align: left;
+      background: rgba(255,255,255,0.1);
+      padding: 15px;
+      border-radius: 12px;
+    }
+
+    .info p {
+      margin-bottom: 10px;
+      font-size: 1rem;
+    }
+
+    .btn {
+      padding: 12px 0;
+      border: 2px solid rgba(255,255,255,0.4);
+      border-radius: 12px;
+      background: rgba(255,255,255,0.2);
+      color: #fff;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .btn:hover {
+      background: rgba(255,255,255,0.35);
+      box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    }
+  </style>
+</head>
+<body>
+
+  <div class="profile-container">
+    <div class="profile-box">
+      <h2>Trang cá nhân</h2>
+      <div class="info" id="userInfo">
+        <p>Đang tải thông tin...</p>
+      </div>
+      <button class="btn" id="logoutBtn">Đăng xuất</button>
+    </div>
+  </div>
+
+  <script>
+    const userInfo = document.getElementById('userInfo');
+    const logoutBtn = document.getElementById('logoutBtn');
+
+    // Lấy user hiện tại từ localStorage
+    const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+
+    if(!currentUser) {
+      alert('Vui lòng đăng nhập trước!');
+      window.location.href = 'login.html';
+    } else {
+      userInfo.innerHTML = `
+        <p><strong>Họ và tên:</strong> ${currentUser.name}</p>
+        <p><strong>Email:</strong> ${currentUser.email}</p>
+        <p><strong>Ngày đăng ký:</strong> ${currentUser.registeredAt || 'N/A'}</p>
+      `;
+    }
+
+    // Nút đăng xuất
+    logoutBtn.addEventListener('click', () => {
+      localStorage.removeItem('currentUser');
+      localStorage.removeItem('loggedIn');
+      alert('Bạn đã đăng xuất!');
+      window.location.href = 'login.html';
+    });
+  </script>
+</body>
+</html>
