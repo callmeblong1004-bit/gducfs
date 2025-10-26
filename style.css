@@ -265,4 +265,153 @@ body.auth-page {
   0% {opacity:0; transform: translateY(-20px);}
   100% {opacity:1; transform: translateY(0);}
 }
+/* =====================
+   STYLE CHO TRANG CHỦ
+===================== */
 
+body.home-page {
+  background: linear-gradient(135deg, #0072ff, #00c6ff);
+  color: white;
+  font-family: 'Poppins', sans-serif;
+  min-height: 100vh;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.header-container {
+  text-align: center;
+  padding: 20px;
+}
+
+.header-container h1 {
+  font-size: 1.8rem;
+  margin-bottom: 10px;
+}
+
+.main-nav {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.main-nav a {
+  color: white;
+  text-decoration: none;
+  background: rgba(255,255,255,0.2);
+  padding: 8px 14px;
+  border-radius: 8px;
+  font-weight: 500;
+  transition: 0.3s;
+}
+
+.main-nav a:hover, .main-nav a.active {
+  background: rgba(255,255,255,0.4);
+}
+
+.intro {
+  text-align: center;
+  margin-top: 50px;
+  flex: 1;
+  padding: 0 20px;
+}
+
+.intro h2 {
+  font-size: 1.8rem;
+  margin-bottom: 10px;
+}
+
+.intro p {
+  font-size: 1.1rem;
+  margin-bottom: 25px;
+}
+
+.btn-group {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  flex-wrap: wrap;
+}
+
+.btn {
+  background: rgba(255,255,255,0.3);
+  border: 2px solid rgba(255,255,255,0.5);
+  color: white;
+  font-weight: 600;
+  border-radius: 10px;
+  padding: 10px 25px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btn:hover {
+  background: rgba(255,255,255,0.5);
+  transform: scale(1.05);
+}
+
+footer {
+  text-align: center;
+  padding: 15px;
+  background: rgba(255,255,255,0.1);
+  font-size: 0.9rem;
+}
+
+/* =====================
+   RESPONSIVE MOBILE
+===================== */
+@media (max-width: 768px) {
+  .header-container h1 {
+    font-size: 1.4rem;
+    line-height: 1.4;
+  }
+
+  .main-nav {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .intro h2 {
+    font-size: 1.4rem;
+  }
+
+  .intro p {
+    font-size: 1rem;
+  }
+
+  .btn {
+    width: 100%;
+    max-width: 250px;
+  }
+
+  .btn-group {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  footer {
+    font-size: 0.85rem;
+  }
+}
+
+/* =====================
+   RESPONSIVE VERY SMALL (điện thoại cỡ nhỏ)
+===================== */
+@media (max-width: 480px) {
+  body {
+    padding: 10px;
+  }
+
+  .header-container {
+    padding: 10px;
+  }
+
+  .intro {
+    margin-top: 30px;
+  }
+
+  .btn {
+    font-size: 0.95rem;
+    padding: 8px 20px;
+  }
+}
