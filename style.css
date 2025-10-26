@@ -724,20 +724,3 @@ footer {
   }
 }
 
-/* --- Xuống dòng CONFESSION khi ở mobile --- */
-header h1 {
-  white-space: nowrap; /* Giữ nguyên 1 dòng mặc định trên PC */
-}
-
-/* Khi ở điện thoại, cho xuống dòng */
-@media (max-width: 768px) {
-  header h1 {
-    white-space: normal; /* Cho phép xuống dòng */
-    line-height: 1.4;
-  }
-
-  .break-mobile {
-    display: block; /* Bắt CONFESSION xuống dòng */
-    margin-top: 4px; /* Tạo khoảng cách nhẹ */
-  }
-}
