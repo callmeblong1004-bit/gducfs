@@ -32,3 +32,59 @@ if (loginForm) {
     }
   });
 }
+// 1️⃣ Firebase config (dán config bạn lấy từ Firebase vào đây)
+const firebaseConfig = {
+  apiKey: "YOUR_API_KEY",
+  authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
+  projectId: "YOUR_PROJECT_ID",
+  storageBucket: "YOUR_PROJECT_ID.appspot.com",
+  messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+  appId: "YOUR_APP_ID"
+};
+
+// 2️⃣ Khởi tạo Firebase
+const app = firebase.initializeApp(firebaseConfig);
+const db = firebase.firestore();
+
+// 3️⃣ Hàm lưu confession vào Firestore
+function saveConfession(name, message) {
+  db.collection("confessions").add({
+    name: name,
+    message: message,
+    timestamp: firebase.firestore.FieldValue.serverTimestamp()
+  })
+  .then(() => {
+    alert("Đã lưu confession!");
+  })
+  .catch((error) => {
+    console.error("Lỗi khi lưu dữ liệu: ", error);
+  });
+}
+
+// 4️⃣ Xử lý submit form
+const form = document.getElementById("confessionForm");
+form.addEventListener("submit", (e) => {
+  e.preventDefault();
+  const name = document.getElementById("name").value;
+  const message = document.getElementById("message").value;
+  if(message.trim() !== "") {
+    saveConfession(name, message);
+    form.reset();
+  } else {
+    alert("Hãy viết confession trước khi gửi!");
+  }
+});
+
+// 5️⃣ Hiển thị danh sách confession (tự động cập nhật)
+const confessionsList = document.getElementById("confessionsList");
+db.collection("confessions").orderBy("timestamp", "desc")
+  .onSnapshot((snapshot) => {
+    confessionsList.innerHTML = ""; // xóa hết trước khi render lại
+    snapshot.forEach((doc) => {
+      const data = doc.data();
+      const div = document.createElement("div");
+      div.innerHTML = `<strong>${data.name || "Ẩn danh"}:</strong> ${data.message}`;
+      confessionsList.appendChild(div);
+    });
+  });
+
