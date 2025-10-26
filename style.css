@@ -723,4 +723,16 @@ footer {
     font-size: 1.4rem;
   }
 }
+/* Mặc định: ẩn xuống dòng (PC vẫn 1 dòng) */
+.mobile-break {
+  display: none;
+}
+
+/* Trên mobile: cho xuống dòng giữa GIA ĐỊNH và CONFESSION */
+@media (max-width: 768px) {
+  .mobile-break {
+    display: block;
+  }
+}
+
 
