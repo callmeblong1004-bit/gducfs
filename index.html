@@ -3,29 +3,61 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Trang chủ</title>
+  <title>Trang chủ | GDU Confession</title>
   <link rel="stylesheet" href="style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
 </head>
-<body>
+<body class="home-page">
+
   <header>
-    <h1>✨GIA ĐỊNH UNIVERSITY CONFESSION✨</h1>
-    <nav>
-      <a href="index.html" class="active">Trang chủ</a>
-      <a href="login.html">Đăng nhập</a>
-      <a href="register.html">Đăng ký</a>
-    </nav>
+    <div class="header-container">
+      <h1>✨ GIA ĐỊNH UNIVERSITY CONFESSION ✨</h1>
+      <nav class="main-nav">
+        <a href="index.html" class="active">Trang chủ</a>
+        <a href="login.html">Đăng nhập</a>
+        <a href="register.html">Đăng ký</a>
+        <a href="profile.html">Cá nhân</a>
+        <a href="confession.html">Confession</a>
+      </nav>
+    </div>
   </header>
 
   <main>
     <section class="intro">
-      <h2>Đây Là Confession Bằng Web Của Đại Học Gia Định</h2>
+      <h2>Confession Online Của Đại Học Gia Định</h2>
       <p>Văn Minh Lên Nhé Các Tình Yêu</p>
-      <button class="btn">Bắt đầu ngay</button>
+      <div class="btn-group">
+        <!-- Cả hai nút là button để dễ quản lý JS -->
+        <button class="btn start-btn">Bắt Đầu</button>
+        <button class="btn view-btn">Xem Confession</button>
+      </div>
     </section>
   </main>
 
   <footer>
-    <p>Được viết bởi Bảo Long - aka Trần Bảo Long</p>
+    <p>Viết bởi Bảo Long - aka Trần Bảo Long</p>
   </footer>
+
+  <script>
+    // Lấy trạng thái đăng nhập
+    const isLoggedIn = localStorage.getItem("loggedIn");
+
+    function goToConfession() {
+      if (isLoggedIn) {
+        window.location.href = "confession.html";
+      } else {
+        alert("Vui lòng đăng nhập trước khi vào Confession");
+        window.location.href = "login.html";
+      }
+    }
+
+    // Gán sự kiện cho nút Bắt đầu
+    const startBtn = document.querySelector(".start-btn");
+    if (startBtn) startBtn.addEventListener("click", goToConfession);
+
+    // Gán sự kiện cho nút Xem Confession
+    const viewBtn = document.querySelector(".view-btn");
+    if (viewBtn) viewBtn.addEventListener("click", goToConfession);
+  </script>
 </body>
 </html>
