@@ -704,3 +704,16 @@ footer {
   }
 }
 
+/* Mặc định (PC): giữ nguyên 1 dòng */
+.break-mobile {
+  display: inline;  /* inline để không ảnh hưởng dòng PC */
+}
+
+/* Mobile: cho chữ Confession xuống dòng */
+@media (max-width: 768px) {
+  .break-mobile {
+    display: block; /* xuống dòng */
+  }
+}
+
+
