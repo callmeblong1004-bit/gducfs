@@ -703,3 +703,16 @@ footer {
     font-size: 1.4rem;
   }
 }
+
+/* Mặc định (PC) sẽ không xuống dòng */
+.mobile-break {
+  display: none;
+}
+
+/* Khi là mobile thì hiển thị xuống dòng */
+@media (max-width: 768px) {
+  .mobile-break {
+    display: inline;
+  }
+}
+
