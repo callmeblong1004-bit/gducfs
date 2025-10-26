@@ -95,9 +95,12 @@ main {
 .intro h2 {
   font-size: 2rem;
   margin-bottom: 1rem;
-  white-space: nowrap; /* chữ luôn trên 1 dòng */
-  overflow: hidden;
-  text-overflow: ellipsis;
+  white-space: normal; /* Cho phép xuống dòng nếu dài */
+  overflow: visible;   /* Không ẩn chữ nữa */
+  text-overflow: unset;
+  line-height: 1.4;
+  word-wrap: break-word;
+  text-align: center;
 }
 
 .intro p {
