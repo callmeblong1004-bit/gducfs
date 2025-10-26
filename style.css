@@ -723,16 +723,21 @@ footer {
     font-size: 1.4rem;
   }
 }
-/* Mặc định: ẩn xuống dòng (PC vẫn 1 dòng) */
-.mobile-break {
-  display: none;
+
+/* --- Xuống dòng CONFESSION khi ở mobile --- */
+header h1 {
+  white-space: nowrap; /* Giữ nguyên 1 dòng mặc định trên PC */
 }
 
-/* Trên mobile: cho xuống dòng giữa GIA ĐỊNH và CONFESSION */
+/* Khi ở điện thoại, cho xuống dòng */
 @media (max-width: 768px) {
-  .mobile-break {
-    display: block;
+  header h1 {
+    white-space: normal; /* Cho phép xuống dòng */
+    line-height: 1.4;
+  }
+
+  .break-mobile {
+    display: block; /* Bắt CONFESSION xuống dòng */
+    margin-top: 4px; /* Tạo khoảng cách nhẹ */
   }
 }
-
-
