@@ -447,6 +447,17 @@ header h1 {
   }
 }
 
+header h1 {
+  font-size: clamp(1.2rem, 4vw, 1.8rem);
+  color: #fff;
+  margin-bottom: 0.5rem;
+  line-height: 1.4;
+  word-break: break-word;
+  padding: 0 10px;
+  margin-left: 20px; /* 👈 Dịch sang phải một chút */
+  text-align: left;  /* Để hiệu ứng rõ hơn */
+}
+
 
 /* =========================
    HEADER
