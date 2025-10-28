@@ -3,17 +3,37 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Confession | GDU Confession</title>
-  <link rel="stylesheet" href="style.css" />
+  <title>GDU Confession</title>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
   <style>
-    /* Phần giao diện cơ bản cho confession */
-    .confession-container {
-      max-width: 700px;
-      margin: 2rem auto;
-      padding: 0 1rem;
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #2b1055, #7597de);
+      color: white;
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
     }
-
+    header {
+      text-align: center;
+      padding: 20px;
+      background: rgba(255,255,255,0.1);
+      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    }
+    header h1 { font-size: 1.8rem; }
+    nav a {
+      color: white;
+      margin: 0 10px;
+      text-decoration: none;
+      transition: 0.3s;
+    }
+    nav a:hover { color: #ff6b81; }
+    main {
+      padding: 20px;
+      max-width: 800px;
+      margin: auto;
+    }
+    .confession-container { margin-bottom: 40px; }
     .confession-card {
       background: rgba(255,255,255,0.1);
       padding: 20px;
@@ -22,195 +42,229 @@
       box-shadow: 0 8px 20px rgba(0,0,0,0.2);
       color: #fff;
     }
-
-    .confession-text {
-      font-size: 1.1rem;
-      margin-bottom: 10px;
+    .confession-text { font-size: 1.1rem; margin-bottom: 10px; white-space: pre-wrap; }
+    .confession-image {
+      width: 100%; max-height: 400px; object-fit: cover;
+      border-radius: 10px; margin-top: 10px;
     }
-
     .confession-actions {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      margin-bottom: 10px;
+      display: flex; align-items: center; gap: 10px; margin-bottom: 10px;
     }
-
     .confession-actions button {
-      background: transparent;
-      border: none;
-      color: #fff;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      gap: 5px;
-      font-size: 1rem;
-      transition: 0.2s;
+      background: transparent; border: none; color: #fff;
+      cursor: pointer; display: flex; align-items: center; gap: 5px;
+      font-size: 1rem; transition: 0.2s;
     }
-
-    .confession-actions button:hover {
-      color: #ff6b81;
-    }
-
-    .comment-section {
-      margin-top: 10px;
-    }
-
-    .comment-section h4 {
-      margin-bottom: 5px;
-    }
-
+    .confession-actions button.liked { color: #ff6b81; }
+    .comment-section { margin-top: 10px; }
     .comment-box {
-      display: flex;
-      gap: 10px;
-      margin-bottom: 10px;
+      display: flex; gap: 10px; margin-top: 10px;
     }
-
     .comment-box input {
-      flex: 1;
-      padding: 8px 10px;
-      border-radius: 10px;
-      border: 1px solid rgba(255,255,255,0.4);
-      outline: none;
-      background: rgba(255,255,255,0.1);
-      color: #fff;
+      flex: 1; padding: 8px 10px; border-radius: 10px;
+      border: 1px solid rgba(255,255,255,0.4); outline: none;
+      background: rgba(255,255,255,0.1); color: #fff;
     }
-
     .comment-box button {
-      padding: 8px 12px;
-      border-radius: 10px;
-      border: none;
-      background: rgba(255,255,255,0.3);
-      color: #fff;
-      cursor: pointer;
-      transition: 0.3s;
+      padding: 8px 12px; border-radius: 10px; border: none;
+      background: rgba(255,255,255,0.3); color: #fff;
+      cursor: pointer; transition: 0.3s;
     }
-
-    .comment-box button:hover {
-      background: rgba(255,255,255,0.5);
-    }
-
+    .comment-box button:hover { background: rgba(255,255,255,0.5); }
     .comment-list p {
-      margin: 5px 0;
-      padding-left: 10px;
+      margin: 5px 0; padding-left: 10px;
       border-left: 2px solid rgba(255,255,255,0.3);
+    }
+    footer {
+      text-align: center; padding: 10px;
+      background: rgba(255,255,255,0.1);
+    }
+    /* Upload ảnh đẹp */
+    .upload-container {
+      display: flex; align-items: center; gap: 10px; margin-top: 10px;
+    }
+    .upload-label {
+      background: rgba(255,255,255,0.2);
+      padding: 8px 15px; border-radius: 10px;
+      cursor: pointer; transition: 0.3s;
+    }
+    .upload-label:hover { background: rgba(255,255,255,0.4); }
+    #imagePreview {
+      margin-top: 10px; border-radius: 10px;
+      max-height: 200px; display: none;
     }
   </style>
 </head>
-<body class="home-page">
-
+<body>
   <header>
-    <div class="header-container">
-      <h1>✨ GIA ĐỊNH UNIVERSITY CONFESSION ✨</h1>
-      <nav class="main-nav">
-        <a href="index.html">Trang chủ</a>
-        <a href="profile.html">Cá nhân</a>
-      </nav>
-    </div>
+    <h1>✨ GIA ĐỊNH UNIVERSITY CONFESSION ✨</h1>
+    <nav>
+      <a href="index.html">Trang chủ</a>
+      <a href="profile.html">Cá nhân</a>
+    </nav>
   </header>
 
   <main>
-    <div class="confession-container" id="confessionContainer">
-      <h2>Confession mới nhất</h2>
-      <!-- Confession sẽ được JS chèn vào đây -->
-    </div>
-
     <div class="confession-container">
-      <h3>Viết Confession mới</h3>
+      <h2>Viết Confession mới</h2>
       <div class="comment-box">
         <input type="text" id="newConfession" placeholder="Nhập confession của bạn..." />
         <button id="addConfessionBtn">Gửi</button>
       </div>
+      <div class="upload-container">
+        <label class="upload-label" for="confessionImage">📷 Tải ảnh lên</label>
+        <input type="file" id="confessionImage" accept="image/*" style="display:none;">
+      </div>
+      <img id="imagePreview" />
+    </div>
+
+    <div class="confession-container" id="confessionContainer">
+      <h2>Confession mới nhất</h2>
     </div>
   </main>
 
   <footer>
-    <p>Viết bởi Bảo Long - aka Trần Bảo Long</p>
+    <p>Viết bởi Bảo Long - GDU Confession</p>
   </footer>
 
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-storage.js"></script>
+
   <script>
-    // Kiểm tra đăng nhập
+    // --- Kiểm tra đăng nhập ---
     const isLoggedIn = localStorage.getItem("loggedIn");
     const currentUser = JSON.parse(localStorage.getItem("currentUser"));
-
     if (!isLoggedIn || !currentUser) {
       alert("Vui lòng đăng nhập để xem Confession");
       window.location.href = "login.html";
     }
 
-    let confessions = JSON.parse(localStorage.getItem("confessions")) || [];
+    // --- Firebase config ---
+    const firebaseConfig = {
+      apiKey: "AIzaSyACpNff8xGZ-FNmngsDA7mRk8m7G_gFXlo",
+      authDomain: "newweb-97f09.firebaseapp.com",
+      projectId: "newweb-97f09",
+      storageBucket: "newweb-97f09.appspot.com"
+    };
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+    const storage = firebase.storage();
 
     const container = document.getElementById("confessionContainer");
 
-    function renderConfessions() {
+    // --- Hiển thị preview ảnh ---
+    const fileInput = document.getElementById("confessionImage");
+    const preview = document.getElementById("imagePreview");
+    let imageFile = null;
+
+    fileInput.onchange = (e) => {
+      const file = e.target.files[0];
+      if (file) {
+        imageFile = file;
+        preview.src = URL.createObjectURL(file);
+        preview.style.display = "block";
+      }
+    };
+
+    // --- Hiển thị Confession ---
+    function renderConfessions(confessions) {
       container.innerHTML = "<h2>Confession mới nhất</h2>";
-      confessions.forEach((conf, index) => {
+      confessions.forEach((conf) => {
+        const likedList = JSON.parse(localStorage.getItem("likedConfessions") || "[]");
+        const liked = likedList.includes(conf.id);
+
         const card = document.createElement("div");
         card.className = "confession-card";
-
         card.innerHTML = `
           <div class="confession-text">${conf.text}</div>
+          ${conf.imageUrl ? `<img class="confession-image" src="${conf.imageUrl}" alt="confession image">` : ""}
           <div class="confession-actions">
-            <button class="like-btn" data-index="${index}">❤️ <span>${conf.likes || 0}</span></button>
+            <button class="like-btn ${liked ? "liked" : ""}" data-id="${conf.id}">
+              ❤️ <span>${conf.likes || 0}</span>
+            </button>
           </div>
           <div class="comment-section">
             <h4>Bình luận:</h4>
-            <div class="comment-list" id="comments-${index}">
-              ${conf.comments ? conf.comments.map(c => `<p>${c}</p>`).join('') : ''}
+            <div class="comment-list">
+              ${(conf.comments || []).map(c => `<p>${c}</p>`).join('')}
             </div>
             <div class="comment-box">
-              <input type="text" placeholder="Viết bình luận..." class="comment-input" data-index="${index}">
-              <button class="comment-btn" data-index="${index}">Gửi</button>
+              <input type="text" placeholder="Viết bình luận..." class="comment-input" data-id="${conf.id}">
+              <button class="comment-btn" data-id="${conf.id}">Gửi</button>
             </div>
           </div>
         `;
         container.appendChild(card);
       });
 
-      // Thêm sự kiện cho thả tim
+      // --- Like ---
       document.querySelectorAll(".like-btn").forEach(btn => {
-        btn.onclick = () => {
-          const i = btn.getAttribute("data-index");
-          confessions[i].likes = (confessions[i].likes || 0) + 1;
-          localStorage.setItem("confessions", JSON.stringify(confessions));
-          renderConfessions();
+        btn.onclick = async () => {
+          const id = btn.getAttribute("data-id");
+          let likedList = JSON.parse(localStorage.getItem("likedConfessions") || "[]");
+          if (likedList.includes(id)) return; // chỉ 1 lần
+
+          const docRef = db.collection("confessions").doc(id);
+          await docRef.update({ likes: firebase.firestore.FieldValue.increment(1) });
+
+          likedList.push(id);
+          localStorage.setItem("likedConfessions", JSON.stringify(likedList));
         };
       });
 
-      // Thêm sự kiện cho comment
+      // --- Bình luận ---
       document.querySelectorAll(".comment-btn").forEach(btn => {
-        btn.onclick = () => {
-          const i = btn.getAttribute("data-index");
-          const input = document.querySelector(`.comment-input[data-index="${i}"]`);
+        btn.onclick = async () => {
+          const id = btn.getAttribute("data-id");
+          const input = document.querySelector(`.comment-input[data-id="${id}"]`);
           const text = input.value.trim();
           if (!text) return;
-          confessions[i].comments = confessions[i].comments || [];
-          confessions[i].comments.push(`${currentUser.name}: ${text}`);
-          localStorage.setItem("confessions", JSON.stringify(confessions));
+
+          const docRef = db.collection("confessions").doc(id);
+          await docRef.update({
+            comments: firebase.firestore.FieldValue.arrayUnion(`${currentUser.name}: ${text}`)
+          });
+
           input.value = "";
-          renderConfessions();
         };
       });
     }
 
-    renderConfessions();
+    // --- Realtime update ---
+    db.collection("confessions").orderBy("createdAt", "desc").onSnapshot(snapshot => {
+      const confessions = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+      renderConfessions(confessions);
+    });
 
-    // Thêm confession mới
-    document.getElementById("addConfessionBtn").onclick = () => {
+    // --- Thêm confession mới ---
+    document.getElementById("addConfessionBtn").onclick = async () => {
       const text = document.getElementById("newConfession").value.trim();
-      if (!text) {
-        alert("Vui lòng nhập confession!");
-        return;
+      if (!text && !imageFile) return alert("Vui lòng nhập confession hoặc chọn ảnh!");
+
+      let imageUrl = "";
+      if (imageFile) {
+        const ref = storage.ref(`confessions/${Date.now()}_${imageFile.name}`);
+        await ref.put(imageFile);
+        imageUrl = await ref.getDownloadURL();
       }
-      confessions.unshift({
+
+      await db.collection("confessions").add({
         text,
+        imageUrl,
         likes: 0,
-        comments: []
+        comments: [],
+        createdAt: new Date(),
+        author: currentUser.name || "Ẩn danh"
       });
-      localStorage.setItem("confessions", JSON.stringify(confessions));
+
       document.getElementById("newConfession").value = "";
-      renderConfessions();
+      preview.style.display = "none";
+      fileInput.value = "";
+      imageFile = null;
     };
   </script>
 </body>
 </html>
-  
+
