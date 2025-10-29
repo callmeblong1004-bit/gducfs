@@ -5,8 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Đăng ký | GDU Confession</title>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+
   <style>
-    /* ===================== GLOBAL RESET ===================== */
     * {
       margin: 0;
       padding: 0;
@@ -22,13 +22,38 @@
       background: linear-gradient(135deg, #0072ff, #00c6ff);
       color: #fff;
       overflow-x: hidden;
+      padding: 20px;
     }
 
-    /* ===================== AUTH CONTAINER ===================== */
     .auth-container {
       width: 100%;
       max-width: 400px;
       padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+
+    /* ✅ Nút trở về trang chủ trên cùng */
+    .btn-home {
+      align-self: flex-start;
+      padding: 8px 16px;
+      border-radius: 50px;
+      border: 1px solid rgba(255,255,255,0.4);
+      background: rgba(255,255,255,0.15);
+      color: #fff;
+      font-size: 0.9rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      cursor: pointer;
+      transition: 0.3s;
+      margin-bottom: 10px;
+    }
+    .btn-home:hover {
+      background: rgba(255,255,255,0.3);
+      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+      transform: translateY(-1px);
     }
 
     .auth-box {
@@ -46,10 +71,6 @@
     .auth-box h2 {
       font-size: 1.8rem;
       font-weight: 600;
-    }
-
-    .input-box {
-      width: 100%;
     }
 
     .input-box input {
@@ -90,6 +111,27 @@
       box-shadow: 0 5px 15px rgba(0,0,0,0.2);
     }
 
+     body {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;  /* Căn giữa form theo chiều dọc */
+  align-items: center;
+  background: linear-gradient(135deg, #0072ff, #00c6ff);
+  color: #fff;
+  font-family: 'Poppins', sans-serif;
+  position: relative;
+  padding-bottom: 40px; /* Khoảng trống cho credit */
+}
+    .credit {
+  position: absolute;
+  bottom: 10px;      /* Cách đáy màn hình 10px */
+  width: 100%;
+  text-align: center;
+  font-size: 0.8rem;
+  color: rgba(255, 255, 255, 0.7);
+}
+
     .switch-text {
       font-size: 0.95rem;
     }
@@ -99,11 +141,29 @@
       font-weight: 500;
       text-decoration: underline;
     }
+
+    /* Responsive */
+    @media (max-width: 480px) {
+      .auth-box {
+        padding: 30px 20px;
+      }
+      .auth-box h2 {
+        font-size: 1.5rem;
+      }
+      .btn, .btn-home {
+        font-size: 0.85rem;
+      }
+    }
   </style>
 </head>
-<body class="auth-page">
+<body>
 
   <div class="auth-container">
+    <!-- Nút trở về trang chủ -->
+    <button type="button" class="btn-home" onclick="window.location.href='index.html'">
+      ← Trang chủ
+    </button>
+
     <div class="auth-box">
       <h2>Đăng ký</h2>
       <form id="registerForm">
@@ -116,13 +176,28 @@
         <div class="input-box">
           <input type="password" id="password" placeholder="Mật khẩu" required>
         </div>
+        <div class="input-box">
+          <input type="password" id="confirmPassword" placeholder="Nhập lại mật khẩu" required>
+        </div>
         <button type="submit" class="btn">Đăng ký</button>
         <p class="switch-text">Đã có tài khoản? <a href="login.html">Đăng nhập</a></p>
       </form>
     </div>
   </div>
 
+     <!-- Thêm cuối body -->
+<div class="credit">
+  Viết bởi Bảo Long
+</div>
+
   <script>
+
+if(localStorage.getItem('loggedIn') === 'true') {
+    alert('Bạn đã đăng nhập! Không thể đăng ký nữa.');
+    window.location.href = 'index.html';
+  }
+
+
     const form = document.getElementById('registerForm');
     form.addEventListener('submit', (e) => {
       e.preventDefault();
@@ -130,6 +205,22 @@
       const name = document.getElementById('name').value.trim();
       const email = document.getElementById('email').value.trim();
       const password = document.getElementById('password').value.trim();
+      const confirmPassword = document.getElementById('confirmPassword').value.trim();
+
+      if (!name || !email || !password) {
+        alert('Vui lòng nhập đầy đủ thông tin!');
+        return;
+      }
+
+      if (password.length < 6) {
+        alert('Mật khẩu phải có ít nhất 6 ký tự!');
+        return;
+      }
+
+      if (password !== confirmPassword) {
+        alert('Mật khẩu nhập lại không khớp!');
+        return;
+      }
 
       const users = JSON.parse(localStorage.getItem('users')) || [];
 
@@ -138,12 +229,15 @@
         return;
       }
 
-      users.push({ name, email, password });
+      const newUser = { name, email, password };
+      users.push(newUser);
       localStorage.setItem('users', JSON.stringify(users));
 
-      alert('Đăng ký thành công!');
+      alert('Đăng ký thành công! Bạn có thể đăng nhập ngay.');
       window.location.href = 'login.html';
     });
   </script>
+
 </body>
 </html>
+>
