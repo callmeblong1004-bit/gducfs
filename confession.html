@@ -1,3 +1,95 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GDU Confession</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+
+<!-- Firebase SDK -->
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; font-family:'Poppins',sans-serif; }
+  body { min-height:100vh; background: linear-gradient(135deg, #0072ff, #00c6ff); color:#fff; display:flex; flex-direction:column; align-items:center; padding:20px; }
+
+  /* Header */
+  .header { width:100%; max-width:700px; margin-bottom:20px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; }
+  .header h1 { font-size:1.8rem; }
+  .header-buttons { display:flex; gap:10px; flex-wrap:wrap; }
+  .btn { padding:10px 20px; border-radius:12px; border:none; background:rgba(255,255,255,0.2); color:#fff; font-weight:600; cursor:pointer; transition:0.3s; white-space:nowrap; }
+  .btn:hover { background:rgba(255,255,255,0.35); }
+
+  /* Form đăng bài */
+  .new-post { width:100%; max-width:700px; background:rgba(255,255,255,0.15); backdrop-filter:blur(10px); border-radius:16px; padding:20px; display:flex; flex-direction:column; gap:10px; margin-bottom:20px; }
+  .new-post textarea { width:100%; padding:12px; border-radius:12px; border:none; background:rgba(255,255,255,0.1); color:#fff; resize:none; min-height:80px; outline:none; }
+
+  /* Upload ảnh */
+  #imageUploadBox { border:2px dashed rgba(255,255,255,0.5); border-radius:15px; padding:20px; text-align:center; cursor:pointer; transition:0.3s; background:rgba(255,255,255,0.1); }
+  #imageUploadBox:hover { background:rgba(255,255,255,0.2); border-color:#fff; }
+  #uploadContent { display:flex; flex-direction:column; align-items:center; gap:10px; }
+  #imagePreview { display:flex; gap:10px; flex-wrap:wrap; margin-top:10px; justify-content:center; }
+  #imagePreview img { width:100px; height:100px; object-fit:cover; border-radius:12px; box-shadow:0 5px 15px rgba(0,0,0,0.2); transition:transform 0.2s; }
+  #imagePreview img:hover { transform: scale(1.05); }
+
+  /* Loader ảnh */
+  .loader { border:4px solid rgba(255,255,255,0.2); border-top:4px solid #fff; border-radius:50%; width:24px; height:24px; animation:spin 1s linear infinite; margin:auto; margin-top:10px; }
+  @keyframes spin { 0% { transform:rotate(0deg);} 100% { transform:rotate(360deg);} }
+
+  /* Danh sách bài đăng */
+  .posts { width:100%; max-width:700px; display:flex; flex-direction:column; gap:15px; }
+  .post { background:rgba(255,255,255,0.15); backdrop-filter:blur(10px); border-radius:16px; padding:15px; }
+  .post-header { font-weight:600; margin-bottom:10px; }
+  .post-content { white-space:pre-wrap; margin-bottom:10px; }
+  .post img { max-width:100%; border-radius:12px; margin-top:10px; box-shadow:0 5px 15px rgba(0,0,0,0.2); }
+
+  /* Bình luận */
+  .comments { margin-top:10px; display:flex; flex-direction:column; gap:8px; }
+  .comment { background:rgba(255,255,255,0.15); padding:10px 12px; border-radius:16px; display:flex; flex-direction:column; gap:4px; box-shadow:0 2px 10px rgba(0,0,0,0.15); transition:0.2s; }
+  .comment:hover { background:rgba(255,255,255,0.25); }
+  .comment-header { font-weight:700; color:#fff; font-size:0.9rem; display:flex; align-items:center; gap:8px; }
+  .comment-avatar { width:28px; height:28px; background:#fff; border-radius:50%; display:flex; justify-content:center; align-items:center; font-size:0.8rem; color:#000; font-weight:700; }
+  .comment-text { font-size:0.9rem; color:#fff; line-height:1.3; }
+  .comment-input { width:100%; padding:8px 12px; border-radius:12px; border:none; outline:none; margin-top:8px; background:rgba(255,255,255,0.1); color:#fff; }
+  .comment-btn { margin-top:5px; align-self:flex-end; background:rgba(255,255,255,0.2); transition:0.2s; }
+  .comment-btn:hover { background:rgba(255,255,255,0.35); }
+
+  .credit { margin-top:40px; font-size:0.8rem; color:rgba(255,255,255,0.7); }
+
+  @media(max-width:500px){
+    .header { flex-direction:column; align-items:flex-start; }
+    .header-buttons { width:100%; display:flex; justify-content:flex-start; flex-wrap:wrap; gap:10px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>GDU Confession</h1>
+  <div class="header-buttons">
+    <button class="btn" id="homeBtn">Trang chủ</button>
+    <button class="btn" id="logoutBtn">Đăng xuất</button>
+  </div>
+</div>
+
+<div class="new-post">
+  <textarea id="postContent" placeholder="Bạn đang nghĩ gì...?"></textarea>
+  <div id="imageUploadBox">
+    <input type="file" id="postImages" accept="image/*" multiple hidden>
+    <div id="uploadContent">
+      <span>📷 Chọn Ảnh</span>
+      <button type="button" class="btn" id="chooseFilesBtn">Chọn ảnh</button>
+    </div>
+    <div id="imagePreview"></div>
+  </div>
+  <button class="btn" id="postBtn">Đăng</button>
+</div>
+
+<div class="posts" id="postsContainer"></div>
+
+<div class="credit">Viết bởi Bảo Long</div>
+
 <script>
   // Firebase setup
   const firebaseConfig = {
@@ -11,11 +103,14 @@
   firebase.initializeApp(firebaseConfig);
   const db = firebase.firestore();
 
-  // User check
+  // Kiểm tra đăng nhập
   const currentUser = JSON.parse(localStorage.getItem('currentUser'));
-  if(!currentUser) window.location.href='login.html';
+  if(!currentUser){
+    alert("⚠️ Vui lòng đăng nhập trước khi vào trang Confession!");
+    window.location.href='login.html';
+  }
 
-  // Header buttons
+  // Nút header
   document.getElementById('logoutBtn').addEventListener('click', ()=>{
     localStorage.removeItem('currentUser');
     window.location.href='login.html';
@@ -30,16 +125,6 @@
 
   chooseFilesBtn.addEventListener('click', ()=> postImages.click());
   imageUploadBox.addEventListener('click', ()=> postImages.click());
-
-  imageUploadBox.addEventListener('dragover', e=>{ e.preventDefault(); imageUploadBox.style.background='rgba(255,255,255,0.2)'; });
-  imageUploadBox.addEventListener('dragleave', e=>{ e.preventDefault(); imageUploadBox.style.background='rgba(255,255,255,0.1)'; });
-  imageUploadBox.addEventListener('drop', e=>{
-    e.preventDefault();
-    postImages.files = e.dataTransfer.files;
-    showPreview();
-    imageUploadBox.style.background='rgba(255,255,255,0.1)';
-  });
-
   postImages.addEventListener('change', showPreview);
 
   function showPreview(){
@@ -58,17 +143,20 @@
     }
   }
 
-  // ImgBB key
+  // ImgBB API
   const imgbbAPIKey = "46ccb22e2eddd283211566a5482eef7b";
 
   async function uploadImageToImgbb(file){
-    try{
-      const formData = new FormData();
-      formData.append('image', file);
+    const formData = new FormData();
+    formData.append('image', file);
+    try {
       const res = await fetch(`https://api.imgbb.com/1/upload?key=${imgbbAPIKey}`, { method:'POST', body:formData });
       const data = await res.json();
       return data.data.url;
-    }catch(err){ console.error(err); return null; }
+    } catch (e) {
+      console.error("Lỗi upload:", e);
+      return null;
+    }
   }
 
   const postBtn = document.getElementById('postBtn');
@@ -77,20 +165,19 @@
   async function postNew(){
     const content = document.getElementById('postContent').value.trim();
     const files = Array.from(postImages.files);
-    if(!content && files.length === 0){ alert('Nhập nội dung hoặc ảnh!'); return; }
+    if(!content && files.length === 0){ alert('Nhập nội dung hoặc chọn ảnh!'); return; }
 
     postBtn.disabled = true;
     postBtn.textContent = "Đang đăng...";
 
-    // Upload tất cả ảnh song song
     const imageUrls = (await Promise.all(files.map(f=>uploadImageToImgbb(f)))).filter(u=>u!=null);
 
     await db.collection('posts').add({
       user: currentUser.name,
       content,
       images: imageUrls,
-      timestamp: new Date(),
-      comments: []
+      comments: [],
+      timestamp: new Date()
     });
 
     document.getElementById('postContent').value='';
@@ -157,3 +244,5 @@
 
   loadPosts();
 </script>
+</body>
+</html>
