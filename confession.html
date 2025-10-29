@@ -97,9 +97,25 @@
     .post-header { display:flex; justify-content:space-between; margin-bottom:10px; font-weight:600; }
     .post-content { margin-bottom:10px; white-space:pre-wrap; }
     .post img { max-width:100%; border-radius:12px; margin-top:10px; box-shadow:0 5px 15px rgba(0,0,0,0.2); }
-    .post-actions { display:flex; gap:10px; }
+    .post-actions { display:flex; gap:10px; margin-bottom:10px; }
     .post-actions button { background:rgba(255,255,255,0.1); border:none; padding:6px 12px; border-radius:10px; cursor:pointer; transition:0.3s; color:#fff; }
     .post-actions button:hover { background:rgba(255,255,255,0.25); }
+
+    /* Comment */
+    .comments { margin-top:10px; display:flex; flex-direction:column; gap:5px; }
+    .comment { background: rgba(255,255,255,0.1); padding:6px 10px; border-radius:10px; font-size:0.9rem; }
+    .comment-form { display:flex; gap:10px; margin-top:5px; }
+    .comment-form input {
+      flex:1;
+      padding:6px 10px;
+      border-radius:10px;
+      border:none;
+      outline:none;
+      background:rgba(255,255,255,0.1);
+      color:#fff;
+    }
+    .comment-form button { padding:6px 12px; border-radius:10px; border:none; background:rgba(255,255,255,0.2); color:#fff; cursor:pointer; transition:0.3s; }
+    .comment-form button:hover { background:rgba(255,255,255,0.35); }
 
     .credit { margin-top:40px; font-size:0.8rem; color:rgba(255,255,255,0.7);}
 
@@ -212,6 +228,13 @@
         <div class="post-actions">
           <button data-id="${posts.length - 1 - i}" class="likeBtn">❤️ ${p.likes.length}</button>
         </div>
+        <div class="comments" id="comments-${posts.length - 1 - i}">
+          ${(p.comments || []).map(c=>`<div class="comment"><b>${c.user}:</b> ${c.text}</div>`).join('')}
+        </div>
+        <div class="comment-form">
+          <input type="text" placeholder="Viết bình luận..." data-id="${posts.length - 1 - i}">
+          <button data-id="${posts.length - 1 - i}">Bình luận</button>
+        </div>
       `;
       postsContainer.appendChild(div);
     });
@@ -230,6 +253,23 @@
         }
       });
     });
+
+    // Comment button
+    document.querySelectorAll('.comment-form button').forEach(btn=>{
+      btn.addEventListener('click', ()=>{
+        const idx = btn.getAttribute('data-id');
+        const input = document.querySelector(`.comment-form input[data-id='${idx}']`);
+        const text = input.value.trim();
+        if(text){
+          let posts = JSON.parse(localStorage.getItem('posts')) || [];
+          if(!posts[idx].comments) posts[idx].comments = [];
+          posts[idx].comments.push({ user: currentUser.name, text });
+          localStorage.setItem('posts', JSON.stringify(posts));
+          input.value='';
+          loadPosts();
+        }
+      });
+    });
   }
 
   postBtn.addEventListener('click', ()=>{
@@ -240,7 +280,7 @@
       return;
     }
     const posts = JSON.parse(localStorage.getItem('posts')) || [];
-    posts.push({ user: currentUser.name, content, image: image && postImageInput.files[0] ? image : '', likes: [] });
+    posts.push({ user: currentUser.name, content, image: image && postImageInput.files[0] ? image : '', likes: [], comments: [] });
     localStorage.setItem('posts', JSON.stringify(posts));
 
     // Reset form
@@ -257,3 +297,4 @@
 
 </body>
 </html>
+
