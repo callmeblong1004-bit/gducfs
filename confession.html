@@ -14,25 +14,84 @@
       color:#fff;
     }
 
+    /* Header */
     .header {
-      width:100%; max-width:700px;
-      margin-bottom:20px;
-      display:flex; justify-content:space-between; align-items:center;
-      flex-wrap: wrap; /* Responsive: xuống dòng khi màn hình nhỏ */
-      gap:10px;
+      width: 100%;
+      max-width: 700px;
+      margin-bottom: 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 10px;
     }
     .header h1 { font-size:1.8rem; }
-    .btn { padding:10px 20px; border-radius:12px; border:none; background:rgba(255,255,255,0.2); color:#fff; font-weight:600; cursor:pointer; transition:0.3s; }
-    .btn:hover { background:rgba(255,255,255,0.35); }
+    .header-buttons {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .btn {
+      padding: 10px 20px;
+      border-radius: 12px;
+      border: none;
+      background: rgba(255,255,255,0.2);
+      color: #fff;
+      font-weight: 600;
+      cursor: pointer;
+      transition: 0.3s;
+      white-space: nowrap;
+    }
+    .btn:hover { background: rgba(255,255,255,0.35); }
 
-    .new-post { width:100%; max-width:700px; background: rgba(255,255,255,0.15); backdrop-filter: blur(10px); border-radius:16px; padding:20px; display:flex; flex-direction:column; gap:10px; margin-bottom:20px; }
+    /* Form đăng bài mới */
+    .new-post {
+      width: 100%;
+      max-width: 700px;
+      background: rgba(255,255,255,0.15);
+      backdrop-filter: blur(10px);
+      border-radius: 16px;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
     .new-post h3 { font-size:1.3rem; margin-bottom:10px; }
-    .new-post textarea { width:100%; padding:12px; border-radius:12px; border:none; background:rgba(255,255,255,0.1); color:#fff; resize:none; min-height:80px; outline:none; }
-    #imageUploadBox { padding:20px; border:2px dashed rgba(255,255,255,0.5); border-radius:15px; text-align:center; cursor:pointer; transition:0.3s; position:relative; }
+    .new-post textarea {
+      width:100%;
+      padding:12px;
+      border-radius:12px;
+      border:none;
+      background:rgba(255,255,255,0.1);
+      color:#fff;
+      resize:none;
+      min-height:80px;
+      outline:none;
+    }
+
+    /* Upload ảnh */
+    #imageUploadBox {
+      padding:20px;
+      border:2px dashed rgba(255,255,255,0.5);
+      border-radius:15px;
+      text-align:center;
+      cursor:pointer;
+      transition:0.3s;
+      position:relative;
+    }
     #imageUploadBox:hover { background:rgba(255,255,255,0.1); border-color:#fff; }
-    #imageUploadBox img { max-width:100%; max-height:250px; margin-top:10px; border-radius:15px; box-shadow:0 5px 15px rgba(0,0,0,0.2); object-fit:cover; }
+    #imageUploadBox img {
+      max-width:100%;
+      max-height:250px;
+      margin-top:10px;
+      border-radius:15px;
+      box-shadow:0 5px 15px rgba(0,0,0,0.2);
+      object-fit:cover;
+    }
     #uploadText { display:block; }
 
+    /* Danh sách posts */
     .posts { width:100%; max-width:700px; display:flex; flex-direction:column; gap:15px; }
     .post { background: rgba(255,255,255,0.15); backdrop-filter: blur(10px); border-radius:16px; padding:15px; }
     .post-header { display:flex; justify-content:space-between; margin-bottom:10px; font-weight:600; }
@@ -48,7 +107,8 @@
     @media(max-width:480px){
       .header { flex-direction: column; align-items:flex-start; gap:10px; }
       .header h1 { font-size:1.5rem; }
-      .btn { font-size:0.85rem; width:100%; text-align:center; }
+      .header-buttons { width:100%; display:flex; justify-content:flex-start; gap:10px; }
+      .btn { font-size:0.85rem; padding:8px 16px; }
       .new-post { padding:15px; }
       .new-post h3 { font-size:1.2rem; }
     }
@@ -64,7 +124,7 @@
   </div>
 </div>
 
-<!-- Form đăng bài mới trên cùng -->
+<!-- Form đăng bài mới -->
 <div class="new-post">
   <h3>Đăng bài mới</h3>
   <textarea id="postContent" placeholder="Bạn đang nghĩ gì...?"></textarea>
@@ -76,7 +136,7 @@
   <button class="btn" id="postBtn">Đăng</button>
 </div>
 
-<!-- Danh sách confession hiển thị dưới form -->
+<!-- Danh sách confession -->
 <div class="posts" id="postsContainer"></div>
 
 <div class="credit">Viết bởi Bảo Long</div>
@@ -156,7 +216,7 @@
       postsContainer.appendChild(div);
     });
 
-    // Thêm sự kiện like
+    // Like button
     document.querySelectorAll('.likeBtn').forEach(btn=>{
       btn.addEventListener('click', ()=>{
         const idx = btn.getAttribute('data-id');
@@ -194,6 +254,6 @@
 
   loadPosts();
 </script>
+
 </body>
 </html>
-
