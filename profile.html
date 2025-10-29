@@ -6,7 +6,6 @@
   <title>Trang cá nhân | GDU Confession</title>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
   <style>
-    /* ===================== GLOBAL RESET ===================== */
     * {
       margin: 0;
       padding: 0;
@@ -22,9 +21,10 @@
       background: linear-gradient(135deg, #0072ff, #00c6ff);
       color: #fff;
       overflow-x: hidden;
+      padding: 20px;
+      position: relative;
     }
 
-    /* ===================== PROFILE CONTAINER ===================== */
     .profile-container {
       width: 100%;
       max-width: 400px;
@@ -75,25 +75,73 @@
       background: rgba(255,255,255,0.35);
       box-shadow: 0 5px 15px rgba(0,0,0,0.2);
     }
+
+    .btn-home {
+      align-self: flex-start;
+      padding: 8px 16px;
+      border-radius: 50px;
+      border: 1px solid rgba(255,255,255,0.4);
+      background: rgba(255,255,255,0.15);
+      color: #fff;
+      font-size: 0.9rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      cursor: pointer;
+      transition: 0.3s;
+      margin-bottom: 10px;
+    }
+
+    .btn-home:hover {
+      background: rgba(255,255,255,0.3);
+      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+      transform: translateY(-1px);
+    }
+
+    .credit {
+      position: absolute;
+      bottom: 10px;
+      width: 100%;
+      text-align: center;
+      font-size: 0.8rem;
+      color: rgba(255, 255, 255, 0.7);
+    }
+
+    @media (max-width: 480px) {
+      .profile-box {
+        padding: 30px 20px;
+      }
+      .profile-box h2 {
+        font-size: 1.5rem;
+      }
+      .btn, .btn-home {
+        font-size: 0.85rem;
+      }
+    }
   </style>
 </head>
 <body>
 
   <div class="profile-container">
     <div class="profile-box">
+      <button class="btn-home" onclick="window.location.href='index.html'">← Trang Chủ</button>
       <h2>Trang cá nhân</h2>
       <div class="info" id="userInfo">
         <p>Đang tải thông tin...</p>
       </div>
       <button class="btn" id="logoutBtn">Đăng xuất</button>
+      <button class="btn" id="switchAccountBtn">Đổi tài khoản khác</button>
     </div>
   </div>
+
+  <div class="credit">Viết bởi Bảo Long</div>
 
   <script>
     const userInfo = document.getElementById('userInfo');
     const logoutBtn = document.getElementById('logoutBtn');
+    const switchAccountBtn = document.getElementById('switchAccountBtn');
 
-    // Lấy user hiện tại từ localStorage
+    // Lấy user hiện tại
     const currentUser = JSON.parse(localStorage.getItem('currentUser'));
 
     if(!currentUser) {
@@ -114,6 +162,16 @@
       alert('Bạn đã đăng xuất!');
       window.location.href = 'login.html';
     });
+
+    // Nút đổi tài khoản
+    switchAccountBtn.addEventListener('click', () => {
+      localStorage.removeItem('currentUser');
+      localStorage.removeItem('loggedIn');
+      alert('Vui lòng đăng nhập tài khoản khác!');
+      window.location.href = 'login.html';
+    });
   </script>
+
 </body>
 </html>
+
