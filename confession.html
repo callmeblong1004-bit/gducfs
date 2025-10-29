@@ -15,7 +15,7 @@
       min-height:100vh;
       display: flex;
       flex-direction: column;
-      overflow-x: hidden;
+      overflow-x: hidden; 
     }
     header { text-align:center; padding:22px 16px; background:rgba(255,255,255,0.04); box-shadow:0 4px 10px rgba(0,0,0,0.25); }
     header h1 { margin:0; font-size:1.6rem; letter-spacing:1px; }
@@ -109,7 +109,7 @@
     </div>
   </div>
 
-  <header><h1>✨ GIA ĐỊNH UNIVERSITY CONFESSION ✨</h1></header>
+  <header><h1>GIA ĐỊNH UNIVERSITY CONFESSION</h1></header>
 
   <main>
     <div class="card">
@@ -143,23 +143,20 @@
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
 
   <script>
-    // --- KIỂM TRA ĐĂNG NHẬP TRƯỚC KHI XEM TRANG ---
-    const currentUser = localStorage.getItem("username");
-    if (!currentUser) {
-      document.getElementById("loginOverlay").style.display = "flex";
+    // =================== KIỂM TRA ĐĂNG NHẬP ===================
+    const currentUser = JSON.parse(localStorage.getItem("currentUser"));
+    const loggedIn = localStorage.getItem("loggedIn");
+
+    const overlay = document.getElementById("loginOverlay");
+
+    if (!currentUser || loggedIn !== "true") {
+      overlay.style.display = "flex";
       document.body.style.overflow = "hidden";
     }
 
-    const IMGBB_API_KEY = "46ccb22e2eddd283211566a5482eef7b";
-    const firebaseConfig = {
-      apiKey: "AIzaSyACpNff8xGZ-FNmngsDA7mRk8m7G_gFXlo",
-      authDomain: "newweb-97f09.firebaseapp.com",
-      projectId: "newweb-97f09",
-      storageBucket: "newweb-97f09.appspot.com"
-    };
-    firebase.initializeApp(firebaseConfig);
-    const db = firebase.firestore();
+    const username = currentUser?.name || "Ẩn danh";
 
+    // =================== ĐĂNG CONFESSION ===================
     const fileInput = document.getElementById("confessionImage");
     const preview = document.getElementById("imagePreview");
     const btn = document.getElementById("addConfessionBtn");
@@ -176,7 +173,7 @@
       preview.style.display = "block";
       document.getElementById("imageInfo").textContent = `Đã chọn: ${f.name}`;
     });
-
+    
     async function uploadToImgBB(file) {
       const base64 = await new Promise((res,rej)=>{
         const r = new FileReader();
@@ -204,7 +201,7 @@
         if (imageFile) imageUrl = await uploadToImgBB(imageFile);
 
         await db.collection("confessions").add({
-          text, author: currentUser, imageUrl,
+          text, author: username, imageUrl,
           likes: [], comments: [],
           createdAt: firebase.firestore.FieldValue.serverTimestamp()
         });
@@ -218,12 +215,13 @@
       btn.disabled = false;
     };
 
+    // =================== HIỂN THỊ CONFESSION ===================
     db.collection("confessions").orderBy("createdAt","desc").onSnapshot(snap=>{
       listInner.innerHTML="";
       snap.forEach(doc=>{
         const d=doc.data();
         const id=doc.id;
-        const liked = d.likes?.includes(currentUser);
+        const liked = d.likes?.includes(username);
         const div=document.createElement("div");
         div.className="confession";
         div.innerHTML=`
@@ -243,12 +241,13 @@
 
     async function toggleLike(id, likes){
       const ref=db.collection("confessions").doc(id);
-      if(likes.includes(currentUser)){
-        await ref.update({likes: firebase.firestore.FieldValue.arrayRemove(currentUser)});
+      if(likes.includes(username)){
+        await ref.update({likes: firebase.firestore.FieldValue.arrayRemove(username)});
       }else{
-        await ref.update({likes: firebase.firestore.FieldValue.arrayUnion(currentUser)});
+        await ref.update({likes: firebase.firestore.FieldValue.arrayUnion(username)});
       }
     }
   </script>
 </body>
 </html>
+
