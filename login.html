@@ -6,7 +6,6 @@
   <title>Đăng nhập | GDU Confession</title>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
   <style>
-    /* ===================== GLOBAL RESET ===================== */
     * {
       margin: 0;
       padding: 0;
@@ -22,13 +21,39 @@
       background: linear-gradient(135deg, #0072ff, #00c6ff);
       color: #fff;
       overflow-x: hidden;
+      padding: 20px;
+      position: relative;
     }
 
-    /* ===================== AUTH CONTAINER ===================== */
     .auth-container {
       width: 100%;
       max-width: 400px;
       padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+
+    /* Nút trở về trang chủ */
+    .btn-home {
+      align-self: flex-start;
+      padding: 8px 16px;
+      border-radius: 50px;
+      border: 1px solid rgba(255,255,255,0.4);
+      background: rgba(255,255,255,0.15);
+      color: #fff;
+      font-size: 0.9rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      cursor: pointer;
+      transition: 0.3s;
+      margin-bottom: 10px;
+    }
+    .btn-home:hover {
+      background: rgba(255,255,255,0.3);
+      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+      transform: translateY(-1px);
     }
 
     .auth-box {
@@ -46,10 +71,6 @@
     .auth-box h2 {
       font-size: 1.8rem;
       font-weight: 600;
-    }
-
-    .input-box {
-      width: 100%;
     }
 
     .input-box input {
@@ -99,11 +120,29 @@
       font-weight: 500;
       text-decoration: underline;
     }
+
+    /* Responsive */
+    @media (max-width: 480px) {
+      .auth-box {
+        padding: 30px 20px;
+      }
+      .auth-box h2 {
+        font-size: 1.5rem;
+      }
+      .btn, .btn-home {
+        font-size: 0.85rem;
+      }
+    }
   </style>
 </head>
-<body class="auth-page">
+<body>
 
   <div class="auth-container">
+    <!-- Nút trở về trang chủ -->
+    <button type="button" class="btn-home" onclick="window.location.href='index.html'">
+      ← Trang chủ
+    </button>
+
     <div class="auth-box">
       <h2>Đăng nhập</h2>
       <form id="loginForm">
@@ -114,13 +153,20 @@
           <input type="password" id="password" placeholder="Mật khẩu" required>
         </div>
         <button type="submit" class="btn">Đăng nhập</button>
-        <p class="switch-text"><a href="forgot.html">Quên mật khẩu?</a></p>
-        <p class="switch-text">Chưa có tài khoản? <a href="register.html">Đăng ký ngay</a></p>
       </form>
+      <p class="switch-text"><a href="forgot.html">Quên mật khẩu?</a></p>
+      <p class="switch-text">Chưa có tài khoản? <a href="register.html">Đăng ký ngay</a></p>
     </div>
   </div>
 
   <script>
+    // Nếu đã đăng nhập rồi, không cho phép truy cập login
+    if(localStorage.getItem('loggedIn') === 'true') {
+      const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+      alert(`Bạn đã đăng nhập với tài khoản ${currentUser.name}.`);
+      window.location.href = 'index.html';
+    }
+
     const form = document.getElementById('loginForm');
     form.addEventListener('submit', (e) => {
       e.preventDefault();
