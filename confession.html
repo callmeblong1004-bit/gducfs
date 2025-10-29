@@ -70,7 +70,7 @@
   // Kiểm tra login
   const currentUser = JSON.parse(localStorage.getItem('currentUser'));
   if(!currentUser || localStorage.getItem('loggedIn') !== 'true'){
-    alert('Bạn cần đăng nhập để vào trang này!');
+    alert('Bạn cần đăng nhập để vào Confession!');
     window.location.href = 'login.html';
   }
 
