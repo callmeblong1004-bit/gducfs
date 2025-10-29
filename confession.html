@@ -1,251 +1,277 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>GDU Confession</title>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
   <style>
+    :root { --accent: #ff6b81; --muted: rgba(255,255,255,0.12); }
     body {
-      font-family: 'Poppins', sans-serif;
-      background: linear-gradient(135deg, #2b1055, #7597de);
-      color: white;
-      margin: 0;
-      padding: 0;
-      min-height: 100vh;
+      font-family: "Poppins", sans-serif;
+      background: linear-gradient(135deg,#2b1055,#7597de);
+      color: #fff; margin:0; min-height:100vh;
+      -webkit-font-smoothing:antialiased;
     }
-    header {
-      text-align: center;
-      padding: 20px;
-      background: rgba(255,255,255,0.1);
-      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    header { text-align:center; padding:22px 16px; background: rgba(255,255,255,0.04); box-shadow: 0 4px 10px rgba(0,0,0,0.25); }
+    header h1 { margin:0; font-size:1.6rem; letter-spacing:1px; }
+    main { max-width:900px; margin:28px auto; padding:0 16px; }
+    .card { background: rgba(255,255,255,0.06); padding:18px; border-radius:14px; box-shadow: 0 8px 24px rgba(0,0,0,0.25); margin-bottom:18px; }
+    input[type="text"], textarea {
+      width:100%; padding:10px 12px; border-radius:10px;
+      border:1px solid rgba(255,255,255,0.12); background: rgba(255,255,255,0.03); color:#fff; outline:none; resize:vertical;
+      font-size:0.98rem;
     }
-    header h1 { font-size: 1.8rem; }
-    nav a {
-      color: white;
-      margin: 0 10px;
-      text-decoration: none;
-      transition: 0.3s;
+    input[type="text"]:focus, textarea:focus { border-color: var(--accent); box-shadow:0 0 8px rgba(255,107,129,0.14); }
+    textarea { min-height:72px; }
+    .row { display:flex; gap:10px; align-items:center; }
+    .left { flex:1; }
+    .btn {
+      background:var(--accent); color:#fff; border:none; padding:10px 14px; border-radius:10px; cursor:pointer; font-weight:600;
     }
-    nav a:hover { color: #ff6b81; }
-    main {
-      padding: 20px;
-      max-width: 800px;
-      margin: auto;
-    }
-    .confession-container { margin-bottom: 40px; }
-    .confession-card {
-      background: rgba(255,255,255,0.1);
-      padding: 20px;
-      border-radius: 16px;
-      margin-bottom: 20px;
-      box-shadow: 0 8px 20px rgba(0,0,0,0.2);
-      color: #fff;
-    }
-    .confession-text { font-size: 1.1rem; margin-bottom: 10px; white-space: pre-wrap; }
-    .confession-author { font-size: 0.95rem; color: #ccc; margin-bottom: 10px; }
-    .confession-image {
-      width: 100%; max-height: 400px; object-fit: cover;
-      border-radius: 10px; margin-top: 10px;
-    }
-    footer {
-      text-align: center; padding: 10px;
-      background: rgba(255,255,255,0.1);
-    }
-
-    /* Ô nhập confession và tên */
-    #senderName, #newConfession {
-      width: 100%;
-      padding: 10px 12px;
-      border-radius: 10px;
-      border: 1px solid rgba(255,255,255,0.3);
-      background: rgba(255,255,255,0.1);
-      color: white;
-      margin-bottom: 10px;
-      font-size: 1rem;
-      outline: none;
-      transition: 0.3s;
-    }
-    #senderName:focus, #newConfession:focus {
-      border-color: #ff6b81;
-      box-shadow: 0 0 6px rgba(255,107,129,0.7);
-    }
-
-    #addConfessionBtn {
-      padding: 10px 20px;
-      background: #ff6b81;
-      border: none;
-      border-radius: 10px;
-      color: white;
-      cursor: pointer;
-      font-size: 1rem;
-      transition: 0.3s;
-    }
-    #addConfessionBtn:hover { background: #ff506b; }
-
-    .upload-container {
-      display: flex; align-items: center; gap: 10px; margin-top: 10px;
-    }
+    .btn[disabled] { opacity:0.7; cursor:default; }
     .upload-label {
-      background: rgba(255,255,255,0.2);
-      padding: 8px 15px; border-radius: 10px;
-      cursor: pointer; transition: 0.3s;
+      display:inline-block; padding:8px 12px; border-radius:10px; background:rgba(255,255,255,0.06); cursor:pointer; border:1px dashed rgba(255,255,255,0.06);
     }
-    .upload-label:hover { background: rgba(255,255,255,0.4); }
-    #imagePreview {
-      margin-top: 10px; border-radius: 10px;
-      max-height: 200px; display: none;
-    }
-
-    /* Loader (vòng xoay khi tải) */
+    #imagePreview { display:none; margin-top:12px; max-width:100%; border-radius:10px; box-shadow:0 6px 18px rgba(0,0,0,0.4); }
     .loader {
-      display: none;
-      margin: 10px auto;
-      border: 5px solid rgba(255,255,255,0.3);
-      border-top: 5px solid #ff6b81;
-      border-radius: 50%;
-      width: 40px;
-      height: 40px;
-      animation: spin 0.8s linear infinite;
+      display:inline-block; width:34px; height:34px; border-radius:50%; border:4px solid rgba(255,255,255,0.12); border-top:4px solid var(--accent);
+      animation:spin .9s linear infinite; vertical-align:middle; margin-left:10px;
     }
-    @keyframes spin {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(360deg); }
+    @keyframes spin { to { transform:rotate(360deg); } }
+
+    /* confession list */
+    .confession-list .confession {
+      margin-top:12px; padding:14px; border-radius:12px; background: rgba(255,255,255,0.03);
     }
+    .confession .meta { color:#dfe6ff77; font-size:0.88rem; margin-bottom:6px; }
+    .confession img { max-width:100%; border-radius:8px; margin-top:8px; display:block; }
+
+    .hint { color:#e6e6e6aa; font-size:0.9rem; margin-top:6px; }
+    footer { text-align:center; color:#eee; opacity:0.8; padding:14px 0; margin-top:20px; }
+    @media (max-width:600px){ .row { flex-direction:column; } .btn { width:100%; } .upload-label{width:100%; text-align:center;} }
   </style>
 </head>
 <body>
   <header>
     <h1>✨ GIA ĐỊNH UNIVERSITY CONFESSION ✨</h1>
-    <nav>
-      <a href="index.html">Trang chủ</a>
-      <a href="profile.html">Cá nhân</a>
-    </nav>
   </header>
 
   <main>
-    <div class="confession-container">
-      <h2>Viết Confession mới</h2>
-      <input type="text" id="senderName" placeholder="Nhập tên (hoặc để trống để ẩn danh)">
-      <textarea id="newConfession" rows="3" placeholder="Nhập confession của bạn..."></textarea>
+    <div class="card">
+      <h3>Viết Confession mới</h3>
 
-      <div class="upload-container">
-        <label class="upload-label" for="confessionImage">📷 Tải ảnh lên</label>
-        <input type="file" id="confessionImage" accept="image/*" style="display:none;">
+      <!-- Tên (decor) -->
+      <div style="margin:10px 0;">
+        <input id="senderName" type="text" placeholder="Nhập tên (hoặc để trống để ẩn danh)" />
       </div>
-      <img id="imagePreview" />
-      <div class="loader" id="loader"></div>
-      <button id="addConfessionBtn">Gửi</button>
+
+      <!-- Confession text -->
+      <div style="margin-bottom:10px;">
+        <textarea id="newConfession" placeholder="Nhập confession của bạn..."></textarea>
+      </div>
+
+      <!-- Upload + preview + send -->
+      <div class="row" style="align-items:flex-start;">
+        <div class="left">
+          <label class="upload-label">
+            📷 Chọn ảnh
+            <input id="confessionImage" type="file" accept="image/*" style="display:none;" />
+          </label>
+          <div id="imageInfo" class="hint" style="margin-top:8px;">(Ảnh không bắt buộc — tối đa ~10MB)</div>
+          <img id="imagePreview" alt="preview">
+        </div>
+
+        <div style="min-width:150px; display:flex; flex-direction:column; gap:8px;">
+          <button id="addConfessionBtn" class="btn">Gửi</button>
+          <div id="statusWrap" style="display:flex; align-items:center; gap:8px; justify-content:center;">
+            <div id="loader" class="loader" style="display:none;"></div>
+            <div id="statusText" style="font-size:0.95rem; color:#fff; opacity:0.9;"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="hint" style="margin-top:12px;">Lưu ý: Ảnh được upload lên ImgBB (miễn phí), nội dung được lưu trên Firebase Firestore.</div>
     </div>
 
-    <div class="confession-container" id="confessionContainer">
-      <h2>Confession mới nhất</h2>
+    <!-- Danh sách confession -->
+    <div class="card confession-list" id="confessionContainer">
+      <h3>Confession mới nhất</h3>
+      <div id="listInner"></div>
     </div>
   </main>
 
-  <footer>
-    <p>Viết bởi Bảo Long - GDU Confession</p>
-  </footer>
+  <footer>Viết bởi Bảo Long - GDU Confession</footer>
 
-  <!-- Firebase SDK -->
+  <!-- Firebase SDK (v8) -->
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-storage.js"></script>
 
   <script>
-    // --- Firebase config ---
+    // --------- CẤU HÌNH (Thay 2 chỗ này) ----------
+    const IMGBB_API_KEY = "46ccb22e2eddd283211566a5482eef7b"; // <-- thay bằng API key từ imgbb.com
     const firebaseConfig = {
       apiKey: "AIzaSyACpNff8xGZ-FNmngsDA7mRk8m7G_gFXlo",
       authDomain: "newweb-97f09.firebaseapp.com",
       projectId: "newweb-97f09",
       storageBucket: "newweb-97f09.appspot.com"
+      // nếu có thêm fields (messagingSenderId, appId) thì tốt, nhưng không bắt buộc
     };
+    // ---------------------------------------------
+
+    // Init Firebase
     firebase.initializeApp(firebaseConfig);
     const db = firebase.firestore();
-    const storage = firebase.storage();
 
-    const container = document.getElementById("confessionContainer");
+    // DOM
     const fileInput = document.getElementById("confessionImage");
     const preview = document.getElementById("imagePreview");
+    const imageInfo = document.getElementById("imageInfo");
+    const btn = document.getElementById("addConfessionBtn");
     const loader = document.getElementById("loader");
+    const statusText = document.getElementById("statusText");
+    const listInner = document.getElementById("listInner");
+
     let imageFile = null;
 
-    // --- Hiển thị preview ảnh ---
-    fileInput.onchange = (e) => {
-      const file = e.target.files[0];
-      if (file) {
-        imageFile = file;
-        preview.src = URL.createObjectURL(file);
-        preview.style.display = "block";
+    // Preview khi chọn ảnh
+    fileInput.addEventListener("change", (e) => {
+      const f = e.target.files[0];
+      if (!f) {
+        imageFile = null;
+        preview.style.display = "none";
+        imageInfo.textContent = "(Ảnh không bắt buộc — tối đa ~10MB)";
+        return;
       }
-    };
+      if (f.size > 10 * 1024 * 1024) { // 10MB limit
+        alert("Ảnh quá lớn (>10MB). Vui lòng chọn ảnh nhỏ hơn.");
+        fileInput.value = "";
+        return;
+      }
+      imageFile = f;
+      preview.src = URL.createObjectURL(f);
+      preview.style.display = "block";
+      imageInfo.textContent = `Đã chọn: ${f.name} (${Math.round(f.size/1024)} KB)`;
+    });
 
-    // --- Hiển thị Confession ---
-    function renderConfessions(confessions) {
-      container.innerHTML = "<h2>Confession mới nhất</h2>";
-      confessions.forEach((conf) => {
-        const card = document.createElement("div");
-        card.className = "confession-card";
-        card.innerHTML = `
-          <div class="confession-author">👤 ${conf.author || "Ẩn danh"}</div>
-          <div class="confession-text">${conf.text}</div>
-          ${conf.imageUrl ? `<img class="confession-image" src="${conf.imageUrl}" alt="confession image">` : ""}
-        `;
-        container.appendChild(card);
+    // Hàm helper: convert file -> base64 (string without prefix)
+    function fileToBase64(file) {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onerror = () => reject(new Error("Không đọc được file ảnh"));
+        reader.onload = () => {
+          const result = reader.result; // data:*/*;base64,xxxxx
+          // remove prefix "data:image/xxx;base64,"
+          const idx = result.indexOf("base64,");
+          if (idx === -1) return resolve(result);
+          resolve(result.substring(idx + 7));
+        };
+        reader.readAsDataURL(file);
       });
     }
 
-    // --- Realtime update ---
-    db.collection("confessions").orderBy("createdAt", "desc").onSnapshot(snapshot => {
-      const confessions = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-      renderConfessions(confessions);
-    });
+    // Upload ảnh lên ImgBB, trả về URL hoặc throw lỗi
+    async function uploadToImgBB(file) {
+      if (!file) return "";
+      // chuyển sang base64
+      const base64 = await fileToBase64(file);
+      const form = new FormData();
+      form.append("image", base64);
+      // optional: form.append("name", "myfile");
+      const url = `https://api.imgbb.com/1/upload?key=${encodeURIComponent(IMGBB_API_KEY)}`;
+      const res = await fetch(url, { method: "POST", body: form });
+      const json = await res.json();
+      if (!res.ok || json.status !== 200) {
+        // lấy message chi tiết nếu có
+        const errMsg = (json && json.error && json.error.message) ? json.error.message : JSON.stringify(json);
+        throw new Error("ImgBB upload failed: " + errMsg);
+      }
+      return json.data.url;
+    }
 
-    // --- Gửi confession ---
-    document.getElementById("addConfessionBtn").onclick = async () => {
+    // Gửi confession: upload ảnh (nếu có) -> lưu Firestore
+    btn.addEventListener("click", async () => {
       const text = document.getElementById("newConfession").value.trim();
       const author = document.getElementById("senderName").value.trim() || "Ẩn danh";
-      if (!text && !imageFile) return alert("Vui lòng nhập confession hoặc chọn ảnh!");
+      if (!text && !imageFile) {
+        alert("Vui lòng nhập confession hoặc chọn ảnh!");
+        return;
+      }
 
-      const btn = document.getElementById("addConfessionBtn");
+      // UI trạng thái
       btn.disabled = true;
-      loader.style.display = "block";
-      btn.textContent = "Đang gửi...";
+      loader.style.display = "inline-block";
+      statusText.textContent = "Đang xử lý...";
 
       try {
         let imageUrl = "";
         if (imageFile) {
-          const ref = storage.ref(`confessions/${Date.now()}_${imageFile.name}`);
-          await ref.put(imageFile);
-          imageUrl = await ref.getDownloadURL();
+          statusText.textContent = "Đang tải ảnh lên ImgBB...";
+          // thử upload
+          imageUrl = await uploadToImgBB(imageFile);
+          statusText.textContent = "Ảnh đã upload";
         }
 
+        statusText.textContent = "Đang lưu confession...";
         await db.collection("confessions").add({
           text,
-          imageUrl,
+          author,
+          imageUrl: imageUrl || "",
           likes: 0,
           comments: [],
-          createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-          author
+          createdAt: firebase.firestore.FieldValue.serverTimestamp()
         });
 
-        // Reset form
+        // reset form
         document.getElementById("newConfession").value = "";
         document.getElementById("senderName").value = "";
         preview.style.display = "none";
         fileInput.value = "";
         imageFile = null;
 
-        alert("🎉 Gửi confession thành công!");
+        statusText.textContent = "Gửi thành công 🎉";
+        setTimeout(() => statusText.textContent = "", 2000);
       } catch (err) {
         console.error(err);
-        alert("❌ Không thể gửi confession. Vui lòng thử lại!");
+        alert("Lỗi khi gửi: " + (err.message || err));
+        statusText.textContent = "Lỗi. Kiểm tra console.";
       } finally {
         loader.style.display = "none";
         btn.disabled = false;
-        btn.textContent = "Gửi";
       }
-    };
+    });
+
+    // Hiển thị danh sách realtime
+    db.collection("confessions").orderBy("createdAt","desc").onSnapshot(snapshot => {
+      listInner.innerHTML = "";
+      snapshot.forEach(doc => {
+        const d = doc.data();
+        const wrapper = document.createElement("div");
+        wrapper.className = "confession";
+        const timeText = d.createdAt && d.createdAt.toDate ? d.createdAt.toDate().toLocaleString() : "";
+        wrapper.innerHTML = `
+          <div class="meta">👤 <strong>${escapeHtml(d.author || "Ẩn danh")}</strong> • <span style="opacity:0.8">${timeText}</span></div>
+          <div class="text">${escapeHtml(d.text || "")}</div>
+          ${d.imageUrl ? `<img src="${escapeAttr(d.imageUrl)}" alt="image">` : ""}
+        `;
+        listInner.appendChild(wrapper);
+      });
+    }, err => {
+      console.error("Realtime read error:", err);
+      listInner.innerHTML = "<div style='color:#ffd6d6'>Không thể đọc dữ liệu. Kiểm tra console.</div>";
+    });
+
+    // small helpers to escape HTML (basic)
+    function escapeHtml(str) {
+      if (!str) return "";
+      return String(str)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+    }
+    function escapeAttr(s) { return escapeHtml(s); }
   </script>
 </body>
 </html>
