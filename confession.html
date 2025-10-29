@@ -23,15 +23,12 @@
   .new-post{width:100%;max-width:700px;background:rgba(255,255,255,0.15);backdrop-filter:blur(10px);border-radius:16px;padding:20px;display:flex;flex-direction:column;gap:10px;margin-bottom:20px;}
   .new-post textarea{width:100%;padding:12px;border-radius:12px;border:none;background:rgba(255,255,255,0.1);color:#fff;resize:none;min-height:80px;outline:none;}
 
-  #imageUploadBox{border:2px dashed rgba(255,255,255,0.5);border-radius:15px;padding:20px;text-align:center;cursor:pointer;transition:0.3s;background:rgba(255,255,255,0.1);position:relative;overflow:hidden;}
+  #imageUploadBox{border:2px dashed rgba(255,255,255,0.5);border-radius:15px;padding:20px;text-align:center;cursor:pointer;transition:0.3s;background:rgba(255,255,255,0.1);}
   #imageUploadBox:hover{background:rgba(255,255,255,0.2);border-color:#fff;}
-  #uploadContent{display:flex;flex-direction:column;align-items:center;gap:8px;font-weight:600;cursor:pointer;position:relative;z-index:2;}
-  #uploadContent input[type="file"]{opacity:0;position:absolute;left:0;top:0;width:100%;height:100%;cursor:pointer;z-index:3;}
-
+  #uploadContent{display:flex;flex-direction:column;align-items:center;gap:10px;}
   #imagePreview{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px;justify-content:center;}
   #imagePreview img{width:100px;height:100px;object-fit:cover;border-radius:12px;box-shadow:0 5px 15px rgba(0,0,0,0.2);transition:transform 0.2s;}
   #imagePreview img:hover{transform:scale(1.05);}
-
   .loader{border:4px solid rgba(255,255,255,0.2);border-top:4px solid #fff;border-radius:50%;width:24px;height:24px;animation:spin 1s linear infinite;margin:auto;margin-top:10px;}
   @keyframes spin{0%{transform:rotate(0deg);}100%{transform:rotate(360deg);}}
 
@@ -40,7 +37,7 @@
   .post-header{font-weight:600;margin-bottom:10px;}
   .post-content{white-space:pre-wrap;margin-bottom:10px;}
   .post img{max-width:100%;border-radius:12px;margin-top:10px;box-shadow:0 5px 15px rgba(0,0,0,0.2);}
-
+  
   .comments{margin-top:10px;display:flex;flex-direction:column;gap:8px;}
   .comment{background:rgba(255,255,255,0.15);padding:10px 12px;border-radius:16px;display:flex;flex-direction:column;gap:4px;box-shadow:0 2px 10px rgba(0,0,0,0.15);}
   .comment:hover{background:rgba(255,255,255,0.25);}
@@ -71,9 +68,10 @@
 <div class="new-post">
   <textarea id="postContent" placeholder="Bạn đang nghĩ gì...?"></textarea>
   <div id="imageUploadBox">
+    <input type="file" id="postImages" accept="image/*" multiple hidden>
     <div id="uploadContent">
-      📷 Chọn ảnh hoặc chụp trực tiếp
-      <input type="file" id="postImages" accept="image/*" capture="environment" multiple>
+      <span>📷 Chọn Ảnh</span>
+      <button type="button" class="btn" id="chooseFilesBtn">Chọn ảnh</button>
     </div>
     <div id="imagePreview"></div>
   </div>
@@ -134,6 +132,8 @@
   // === Hiển thị preview ảnh ===
   const postImages = document.getElementById('postImages');
   const imagePreview = document.getElementById('imagePreview');
+  const chooseFilesBtn = document.getElementById('chooseFilesBtn');
+  chooseFilesBtn.addEventListener('click', () => postImages.click());
   postImages.addEventListener('change', () => {
     imagePreview.innerHTML = '';
     for (const file of postImages.files) {
@@ -145,60 +145,9 @@
     }
   });
 
-  const postsContainer = document.getElementById('postsContainer');
-
-  // === Hàm tạo post element ===
-  function createPostElement(p, docId) {
-    const div = document.createElement('div');
-    div.className = 'post';
-    div.innerHTML = `
-      <div class="post-header">${p.user}</div>
-      <div class="post-content">${p.content || ''}</div>
-      ${p.images ? p.images.map(url => `<img src="${url}">`).join('') : ''}
-      <div class="comments"></div>
-      <textarea class="comment-input" placeholder="Viết bình luận..."></textarea>
-      <button class="btn comment-btn">Bình luận</button>
-    `;
-
-    const commentsDiv = div.querySelector('.comments');
-    renderComments(commentsDiv, p.comments || []);
-
-    const commentInput = div.querySelector('.comment-input');
-    const commentBtn = div.querySelector('.comment-btn');
-    commentBtn.addEventListener('click', async () => {
-      const text = commentInput.value.trim();
-      if (!text) return;
-      await db.collection('posts').doc(docId).update({
-        comments: firebase.firestore.FieldValue.arrayUnion({ user: currentUser.name, text })
-      });
-      const newComment = { user: currentUser.name, text };
-      renderComments(commentsDiv, [...(p.comments || []), newComment]);
-      p.comments = [...(p.comments || []), newComment];
-      commentInput.value = '';
-    });
-
-    return div;
-  }
-
-  // === Render comments ===
-  function renderComments(commentsDiv, comments) {
-    commentsDiv.innerHTML = '';
-    comments.forEach(c => {
-      const cDiv = document.createElement('div');
-      cDiv.className = 'comment';
-      const avatar = c.user.charAt(0).toUpperCase();
-      cDiv.innerHTML = `
-        <div class="comment-header">
-          <div class="comment-avatar">${avatar}</div> ${c.user}
-        </div>
-        <div class="comment-text">${c.text}</div>
-      `;
-      commentsDiv.appendChild(cDiv);
-    });
-  }
-
-  // === Đăng bài (không reload) ===
+  // === Đăng bài không reload ===
   const postBtn = document.getElementById('postBtn');
+  const postsContainer = document.getElementById('postsContainer');
 
   async function postNew() {
     const content = document.getElementById('postContent').value.trim();
@@ -219,40 +168,90 @@
       await Promise.all(files.map(async (file) => await uploadImageToImgbb(file)))
     ).filter((url) => url != null);
 
-    const newPost = {
+    loader.remove();
+
+    const docRef = await db.collection('posts').add({
       user: currentUser.name,
       content,
       images: imageUrls,
       comments: [],
       timestamp: new Date()
-    };
+    });
 
-    const docRef = await db.collection('posts').add(newPost);
-
-    // Reset form
     document.getElementById('postContent').value = '';
     postImages.value = '';
     imagePreview.innerHTML = '';
-
-    loader.remove();
     postBtn.disabled = false;
     postBtn.textContent = "Đăng";
 
-    // ✅ Thêm bài mới lên đầu
-    const postElement = createPostElement(newPost, docRef.id);
-    postsContainer.prepend(postElement);
+    // Thêm bài mới lên UI ngay
+    const newPostData = {
+      user: currentUser.name,
+      content,
+      images: imageUrls,
+      comments: []
+    };
+    renderPost(docRef.id, newPostData, true);
   }
 
   postBtn.addEventListener('click', postNew);
 
-  // === Tải các bài viết cũ ===
+  // === Hiển thị bình luận ===
+  function renderComments(commentsDiv, comments) {
+    commentsDiv.innerHTML = '';
+    comments.forEach(c => {
+      const cDiv = document.createElement('div');
+      cDiv.className = 'comment';
+      const avatar = c.user.charAt(0).toUpperCase();
+      cDiv.innerHTML = `
+        <div class="comment-header">
+          <div class="comment-avatar">${avatar}</div> ${c.user}
+        </div>
+        <div class="comment-text">${c.text}</div>
+      `;
+      commentsDiv.appendChild(cDiv);
+    });
+  }
+
+  // === Hiển thị 1 bài viết ===
+  function renderPost(docId, p, prepend=false) {
+    const div = document.createElement('div');
+    div.className = 'post';
+    div.innerHTML = `
+      <div class="post-header">${p.user}</div>
+      <div class="post-content">${p.content || ''}</div>
+      ${p.images ? p.images.map(url => `<img src="${url}">`).join('') : ''}
+      <div class="comments"></div>
+      <textarea class="comment-input" placeholder="Viết bình luận..."></textarea>
+      <button class="btn comment-btn">Bình luận</button>
+    `;
+    if(prepend) postsContainer.prepend(div);
+    else postsContainer.appendChild(div);
+
+    const commentsDiv = div.querySelector('.comments');
+    renderComments(commentsDiv, p.comments || []);
+
+    const commentInput = div.querySelector('.comment-input');
+    const commentBtn = div.querySelector('.comment-btn');
+    commentBtn.addEventListener('click', async () => {
+      const text = commentInput.value.trim();
+      if (!text) return;
+      await db.collection('posts').doc(docId).update({
+        comments: firebase.firestore.FieldValue.arrayUnion({ user: currentUser.name, text })
+      });
+      commentInput.value = '';
+      commentsDiv.innerHTML = '';
+      const updatedDoc = await db.collection('posts').doc(docId).get();
+      renderComments(commentsDiv, updatedDoc.data().comments || []);
+    });
+  }
+
+  // === Tải tất cả bài viết ===
   async function loadPosts() {
     postsContainer.innerHTML = '';
     const snapshot = await db.collection('posts').orderBy('timestamp', 'desc').get();
     snapshot.forEach(doc => {
-      const p = doc.data();
-      const postElement = createPostElement(p, doc.id);
-      postsContainer.appendChild(postElement);
+      renderPost(doc.id, doc.data());
     });
   }
 
@@ -260,5 +259,6 @@
 </script>
 </body>
 </html>
+
 
  
