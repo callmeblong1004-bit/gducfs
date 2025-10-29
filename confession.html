@@ -11,55 +11,50 @@
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
 
 <style>
-  * { margin:0; padding:0; box-sizing:border-box; font-family:'Poppins',sans-serif; }
-  body { min-height:100vh; background: linear-gradient(135deg, #0072ff, #00c6ff); color:#fff; display:flex; flex-direction:column; align-items:center; padding:20px; }
+  *{margin:0;padding:0;box-sizing:border-box;font-family:'Poppins',sans-serif;}
+  body{min-height:100vh;background:linear-gradient(135deg,#0072ff,#00c6ff);color:#fff;display:flex;flex-direction:column;align-items:center;padding:20px;}
 
-  /* Header */
-  .header { width:100%; max-width:700px; margin-bottom:20px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; }
-  .header h1 { font-size:1.8rem; }
-  .header-buttons { display:flex; gap:10px; flex-wrap:wrap; }
-  .btn { padding:10px 20px; border-radius:12px; border:none; background:rgba(255,255,255,0.2); color:#fff; font-weight:600; cursor:pointer; transition:0.3s; white-space:nowrap; }
-  .btn:hover { background:rgba(255,255,255,0.35); }
+  .header{width:100%;max-width:700px;margin-bottom:20px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;}
+  .header h1{font-size:1.8rem;}
+  .header-buttons{display:flex;gap:10px;flex-wrap:wrap;}
+  .btn{padding:10px 20px;border-radius:12px;border:none;background:rgba(255,255,255,0.2);color:#fff;font-weight:600;cursor:pointer;transition:0.3s;}
+  .btn:hover{background:rgba(255,255,255,0.35);}
 
-  /* Form đăng bài */
-  .new-post { width:100%; max-width:700px; background:rgba(255,255,255,0.15); backdrop-filter:blur(10px); border-radius:16px; padding:20px; display:flex; flex-direction:column; gap:10px; margin-bottom:20px; }
-  .new-post textarea { width:100%; padding:12px; border-radius:12px; border:none; background:rgba(255,255,255,0.1); color:#fff; resize:none; min-height:80px; outline:none; }
+  .new-post{width:100%;max-width:700px;background:rgba(255,255,255,0.15);backdrop-filter:blur(10px);border-radius:16px;padding:20px;display:flex;flex-direction:column;gap:10px;margin-bottom:20px;}
+  .new-post textarea{width:100%;padding:12px;border-radius:12px;border:none;background:rgba(255,255,255,0.1);color:#fff;resize:none;min-height:80px;outline:none;}
 
-  /* Upload ảnh */
-  #imageUploadBox { border:2px dashed rgba(255,255,255,0.5); border-radius:15px; padding:20px; text-align:center; cursor:pointer; transition:0.3s; background:rgba(255,255,255,0.1); }
-  #imageUploadBox:hover { background:rgba(255,255,255,0.2); border-color:#fff; }
-  #uploadContent { display:flex; flex-direction:column; align-items:center; gap:10px; }
-  #imagePreview { display:flex; gap:10px; flex-wrap:wrap; margin-top:10px; justify-content:center; }
-  #imagePreview img { width:100px; height:100px; object-fit:cover; border-radius:12px; box-shadow:0 5px 15px rgba(0,0,0,0.2); transition:transform 0.2s; }
-  #imagePreview img:hover { transform: scale(1.05); }
+  #imageUploadBox{border:2px dashed rgba(255,255,255,0.5);border-radius:15px;padding:20px;text-align:center;cursor:pointer;transition:0.3s;background:rgba(255,255,255,0.1);position:relative;overflow:hidden;}
+  #imageUploadBox:hover{background:rgba(255,255,255,0.2);border-color:#fff;}
+  #uploadContent{display:flex;flex-direction:column;align-items:center;gap:8px;font-weight:600;cursor:pointer;position:relative;z-index:2;}
+  #uploadContent input[type="file"]{opacity:0;position:absolute;left:0;top:0;width:100%;height:100%;cursor:pointer;z-index:3;}
 
-  /* Loader ảnh */
-  .loader { border:4px solid rgba(255,255,255,0.2); border-top:4px solid #fff; border-radius:50%; width:24px; height:24px; animation:spin 1s linear infinite; margin:auto; margin-top:10px; }
-  @keyframes spin { 0% { transform:rotate(0deg);} 100% { transform:rotate(360deg);} }
+  #imagePreview{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px;justify-content:center;}
+  #imagePreview img{width:100px;height:100px;object-fit:cover;border-radius:12px;box-shadow:0 5px 15px rgba(0,0,0,0.2);transition:transform 0.2s;}
+  #imagePreview img:hover{transform:scale(1.05);}
 
-  /* Danh sách bài đăng */
-  .posts { width:100%; max-width:700px; display:flex; flex-direction:column; gap:15px; }
-  .post { background:rgba(255,255,255,0.15); backdrop-filter:blur(10px); border-radius:16px; padding:15px; }
-  .post-header { font-weight:600; margin-bottom:10px; }
-  .post-content { white-space:pre-wrap; margin-bottom:10px; }
-  .post img { max-width:100%; border-radius:12px; margin-top:10px; box-shadow:0 5px 15px rgba(0,0,0,0.2); }
+  .loader{border:4px solid rgba(255,255,255,0.2);border-top:4px solid #fff;border-radius:50%;width:24px;height:24px;animation:spin 1s linear infinite;margin:auto;margin-top:10px;}
+  @keyframes spin{0%{transform:rotate(0deg);}100%{transform:rotate(360deg);}}
 
-  /* Bình luận */
-  .comments { margin-top:10px; display:flex; flex-direction:column; gap:8px; }
-  .comment { background:rgba(255,255,255,0.15); padding:10px 12px; border-radius:16px; display:flex; flex-direction:column; gap:4px; box-shadow:0 2px 10px rgba(0,0,0,0.15); transition:0.2s; }
-  .comment:hover { background:rgba(255,255,255,0.25); }
-  .comment-header { font-weight:700; color:#fff; font-size:0.9rem; display:flex; align-items:center; gap:8px; }
-  .comment-avatar { width:28px; height:28px; background:#fff; border-radius:50%; display:flex; justify-content:center; align-items:center; font-size:0.8rem; color:#000; font-weight:700; }
-  .comment-text { font-size:0.9rem; color:#fff; line-height:1.3; }
-  .comment-input { width:100%; padding:8px 12px; border-radius:12px; border:none; outline:none; margin-top:8px; background:rgba(255,255,255,0.1); color:#fff; }
-  .comment-btn { margin-top:5px; align-self:flex-end; background:rgba(255,255,255,0.2); transition:0.2s; }
-  .comment-btn:hover { background:rgba(255,255,255,0.35); }
+  .posts{width:100%;max-width:700px;display:flex;flex-direction:column;gap:15px;}
+  .post{background:rgba(255,255,255,0.15);backdrop-filter:blur(10px);border-radius:16px;padding:15px;}
+  .post-header{font-weight:600;margin-bottom:10px;}
+  .post-content{white-space:pre-wrap;margin-bottom:10px;}
+  .post img{max-width:100%;border-radius:12px;margin-top:10px;box-shadow:0 5px 15px rgba(0,0,0,0.2);}
 
-  .credit { margin-top:40px; font-size:0.8rem; color:rgba(255,255,255,0.7); }
+  .comments{margin-top:10px;display:flex;flex-direction:column;gap:8px;}
+  .comment{background:rgba(255,255,255,0.15);padding:10px 12px;border-radius:16px;display:flex;flex-direction:column;gap:4px;box-shadow:0 2px 10px rgba(0,0,0,0.15);}
+  .comment:hover{background:rgba(255,255,255,0.25);}
+  .comment-header{font-weight:700;color:#fff;font-size:0.9rem;display:flex;align-items:center;gap:8px;}
+  .comment-avatar{width:28px;height:28px;background:#fff;border-radius:50%;display:flex;justify-content:center;align-items:center;font-size:0.8rem;color:#000;font-weight:700;}
+  .comment-text{font-size:0.9rem;color:#fff;line-height:1.3;}
+  .comment-input{width:100%;padding:8px 12px;border-radius:12px;border:none;outline:none;margin-top:8px;background:rgba(255,255,255,0.1);color:#fff;}
+  .comment-btn{margin-top:5px;align-self:flex-end;background:rgba(255,255,255,0.2);transition:0.2s;}
+  .comment-btn:hover{background:rgba(255,255,255,0.35);}
 
+  .credit{margin-top:40px;font-size:0.8rem;color:rgba(255,255,255,0.7);}
   @media(max-width:500px){
-    .header { flex-direction:column; align-items:flex-start; }
-    .header-buttons { width:100%; display:flex; justify-content:flex-start; flex-wrap:wrap; gap:10px; }
+    .header{flex-direction:column;align-items:flex-start;}
+    .header-buttons{width:100%;display:flex;justify-content:flex-start;flex-wrap:wrap;gap:10px;}
   }
 </style>
 </head>
@@ -76,10 +71,9 @@
 <div class="new-post">
   <textarea id="postContent" placeholder="Bạn đang nghĩ gì...?"></textarea>
   <div id="imageUploadBox">
-    <input type="file" id="postImages" accept="image/*" multiple hidden>
     <div id="uploadContent">
-      <span>📷 Chọn Ảnh</span>
-      <button type="button" class="btn" id="chooseFilesBtn">Chọn ảnh</button>
+      📷 Chọn ảnh hoặc chụp trực tiếp
+      <input type="file" id="postImages" accept="image/*" capture="environment" multiple>
     </div>
     <div id="imagePreview"></div>
   </div>
@@ -87,11 +81,10 @@
 </div>
 
 <div class="posts" id="postsContainer"></div>
-
 <div class="credit">Viết bởi Bảo Long</div>
 
 <script>
-  // Firebase setup
+  // === Firebase setup ===
   const firebaseConfig = {
     apiKey: "AIzaSyCMSuIcBzVMYA6XyQooRvrolO1hcmdXRH0",
     authDomain: "webcfs-1bfb4.firebaseapp.com",
@@ -105,102 +98,98 @@
 
   // Kiểm tra đăng nhập
   const currentUser = JSON.parse(localStorage.getItem('currentUser'));
-  if(!currentUser){
-    alert("⚠️ Vui lòng đăng nhập trước khi vào trang Confession!");
-    window.location.href='login.html';
+  if (!currentUser) {
+    alert("⚠️ Vui lòng đăng nhập trước khi vào Confession!");
+    window.location.href = 'login.html';
   }
 
-  // Nút header
-  document.getElementById('logoutBtn').addEventListener('click', ()=>{
+  // Header buttons
+  document.getElementById('logoutBtn').addEventListener('click', () => {
     localStorage.removeItem('currentUser');
-    window.location.href='login.html';
+    window.location.href = 'login.html';
   });
-  document.getElementById('homeBtn').addEventListener('click', ()=>{ window.location.href='index.html'; });
+  document.getElementById('homeBtn').addEventListener('click', () => {
+    window.location.href = 'index.html';
+  });
 
-  // Upload ảnh
-  const imageUploadBox = document.getElementById('imageUploadBox');
-  const postImages = document.getElementById('postImages');
-  const imagePreview = document.getElementById('imagePreview');
-  const chooseFilesBtn = document.getElementById('chooseFilesBtn');
-
-  chooseFilesBtn.addEventListener('click', ()=> postImages.click());
-  imageUploadBox.addEventListener('click', ()=> postImages.click());
-  postImages.addEventListener('change', showPreview);
-
-  function showPreview(){
-    imagePreview.innerHTML = '';
-    for(let i=0;i<postImages.files.length;i++){
-      const file = postImages.files[i];
-      if(file && file.type.startsWith('image/')){
-        const reader = new FileReader();
-        reader.onload = e=>{
-          const img = document.createElement('img');
-          img.src = e.target.result;
-          imagePreview.appendChild(img);
-        }
-        reader.readAsDataURL(file);
-      }
-    }
-  }
-
-  // ImgBB API
-  const imgbbAPIKey = "46ccb22e2eddd283211566a5482eef7b";
-
-  async function uploadImageToImgbb(file){
-    const formData = new FormData();
-    formData.append('image', file);
+  // === Upload ảnh lên ImgBB ===
+  const imgbbAPIKey = "d5123d6d030c259343ca93a256548891";
+  async function uploadImageToImgbb(file) {
     try {
-      const res = await fetch(`https://api.imgbb.com/1/upload?key=${imgbbAPIKey}`, { method:'POST', body:formData });
-      const data = await res.json();
-      return data.data.url;
-    } catch (e) {
-      console.error("Lỗi upload:", e);
+      const formData = new FormData();
+      formData.append("image", file);
+      const response = await fetch(`https://api.imgbb.com/1/upload?key=${imgbbAPIKey}`, {
+        method: "POST",
+        body: formData
+      });
+      const result = await response.json();
+      if (!response.ok || !result.data) throw new Error("Upload lỗi!");
+      return result.data.url;
+    } catch (err) {
+      console.error("Lỗi upload ảnh:", err);
       return null;
     }
   }
 
-  const postBtn = document.getElementById('postBtn');
+  // === Hiển thị preview ảnh ===
+  const postImages = document.getElementById('postImages');
+  const imagePreview = document.getElementById('imagePreview');
+  postImages.addEventListener('change', () => {
+    imagePreview.innerHTML = '';
+    for (const file of postImages.files) {
+      if (file.type.startsWith('image/')) {
+        const img = document.createElement('img');
+        img.src = URL.createObjectURL(file);
+        imagePreview.appendChild(img);
+      }
+    }
+  });
+
   const postsContainer = document.getElementById('postsContainer');
 
-  async function postNew(){
-    const content = document.getElementById('postContent').value.trim();
-    const files = Array.from(postImages.files);
-    if(!content && files.length === 0){ alert('Nhập nội dung hoặc chọn ảnh!'); return; }
+  // === Hàm tạo post element ===
+  function createPostElement(p, docId) {
+    const div = document.createElement('div');
+    div.className = 'post';
+    div.innerHTML = `
+      <div class="post-header">${p.user}</div>
+      <div class="post-content">${p.content || ''}</div>
+      ${p.images ? p.images.map(url => `<img src="${url}">`).join('') : ''}
+      <div class="comments"></div>
+      <textarea class="comment-input" placeholder="Viết bình luận..."></textarea>
+      <button class="btn comment-btn">Bình luận</button>
+    `;
 
-    postBtn.disabled = true;
-    postBtn.textContent = "Đang đăng...";
+    const commentsDiv = div.querySelector('.comments');
+    renderComments(commentsDiv, p.comments || []);
 
-    const imageUrls = (await Promise.all(files.map(f=>uploadImageToImgbb(f)))).filter(u=>u!=null);
-
-    await db.collection('posts').add({
-      user: currentUser.name,
-      content,
-      images: imageUrls,
-      comments: [],
-      timestamp: new Date()
+    const commentInput = div.querySelector('.comment-input');
+    const commentBtn = div.querySelector('.comment-btn');
+    commentBtn.addEventListener('click', async () => {
+      const text = commentInput.value.trim();
+      if (!text) return;
+      await db.collection('posts').doc(docId).update({
+        comments: firebase.firestore.FieldValue.arrayUnion({ user: currentUser.name, text })
+      });
+      const newComment = { user: currentUser.name, text };
+      renderComments(commentsDiv, [...(p.comments || []), newComment]);
+      p.comments = [...(p.comments || []), newComment];
+      commentInput.value = '';
     });
 
-    document.getElementById('postContent').value='';
-    postImages.value='';
-    imagePreview.innerHTML='';
-    postBtn.disabled = false;
-    postBtn.textContent = "Đăng";
-
-    loadPosts();
+    return div;
   }
 
-  postBtn.addEventListener('click', postNew);
-
-  function renderComments(commentsDiv, comments){
-    commentsDiv.innerHTML='';
-    comments.forEach(c=>{
+  // === Render comments ===
+  function renderComments(commentsDiv, comments) {
+    commentsDiv.innerHTML = '';
+    comments.forEach(c => {
       const cDiv = document.createElement('div');
-      cDiv.className='comment';
+      cDiv.className = 'comment';
       const avatar = c.user.charAt(0).toUpperCase();
-      cDiv.innerHTML=`
+      cDiv.innerHTML = `
         <div class="comment-header">
-          <div class="comment-avatar">${avatar}</div>
-          ${c.user}
+          <div class="comment-avatar">${avatar}</div> ${c.user}
         </div>
         <div class="comment-text">${c.text}</div>
       `;
@@ -208,37 +197,62 @@
     });
   }
 
-  async function loadPosts(){
-    postsContainer.innerHTML='';
-    const snapshot = await db.collection('posts').orderBy('timestamp','desc').get();
-    snapshot.forEach(doc=>{
+  // === Đăng bài (không reload) ===
+  const postBtn = document.getElementById('postBtn');
+
+  async function postNew() {
+    const content = document.getElementById('postContent').value.trim();
+    const files = Array.from(postImages.files);
+    if (!content && files.length === 0) {
+      alert("Vui lòng nhập nội dung hoặc chọn ảnh!");
+      return;
+    }
+
+    postBtn.disabled = true;
+    postBtn.textContent = "Đang đăng...";
+
+    const loader = document.createElement("div");
+    loader.className = "loader";
+    postsContainer.prepend(loader);
+
+    const imageUrls = (
+      await Promise.all(files.map(async (file) => await uploadImageToImgbb(file)))
+    ).filter((url) => url != null);
+
+    const newPost = {
+      user: currentUser.name,
+      content,
+      images: imageUrls,
+      comments: [],
+      timestamp: new Date()
+    };
+
+    const docRef = await db.collection('posts').add(newPost);
+
+    // Reset form
+    document.getElementById('postContent').value = '';
+    postImages.value = '';
+    imagePreview.innerHTML = '';
+
+    loader.remove();
+    postBtn.disabled = false;
+    postBtn.textContent = "Đăng";
+
+    // ✅ Thêm bài mới lên đầu
+    const postElement = createPostElement(newPost, docRef.id);
+    postsContainer.prepend(postElement);
+  }
+
+  postBtn.addEventListener('click', postNew);
+
+  // === Tải các bài viết cũ ===
+  async function loadPosts() {
+    postsContainer.innerHTML = '';
+    const snapshot = await db.collection('posts').orderBy('timestamp', 'desc').get();
+    snapshot.forEach(doc => {
       const p = doc.data();
-      const div = document.createElement('div');
-      div.className='post';
-      div.innerHTML=`
-        <div class="post-header">${p.user}</div>
-        <div class="post-content">${p.content || ''}</div>
-        ${p.images ? p.images.map(url=>`<img src="${url}">`).join('') : ''}
-        <div class="comments"></div>
-        <textarea class="comment-input" placeholder="Viết bình luận..."></textarea>
-        <button class="btn comment-btn">Bình luận</button>
-      `;
-      postsContainer.appendChild(div);
-
-      const commentsDiv = div.querySelector('.comments');
-      renderComments(commentsDiv, p.comments || []);
-
-      const commentInput = div.querySelector('.comment-input');
-      const commentBtn = div.querySelector('.comment-btn');
-      commentBtn.addEventListener('click', async ()=>{
-        const text = commentInput.value.trim();
-        if(!text) return;
-        await db.collection('posts').doc(doc.id).update({
-          comments: firebase.firestore.FieldValue.arrayUnion({ user: currentUser.name, text })
-        });
-        commentInput.value='';
-        loadPosts();
-      });
+      const postElement = createPostElement(p, doc.id);
+      postsContainer.appendChild(postElement);
     });
   }
 
