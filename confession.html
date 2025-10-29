@@ -1,253 +1,184 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>GDU Confession</title>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
   <style>
-    :root { --accent: #ff6b81; --muted: rgba(255,255,255,0.12); }
+    * {margin:0; padding:0; box-sizing:border-box; font-family:'Poppins',sans-serif;}
     body {
-      font-family: "Poppins", sans-serif;
-      background: linear-gradient(135deg,#2b1055,#7597de);
-      color: #fff;
-      margin:0;
-      min-height:100vh;
-      display: flex;
-      flex-direction: column;
-      overflow-x: hidden; 
+      min-height: 100vh;
+      background: linear-gradient(135deg, #0072ff, #00c6ff);
+      display: flex; flex-direction: column; align-items:center; padding:20px;
+      color:#fff;
     }
-    header { text-align:center; padding:22px 16px; background:rgba(255,255,255,0.04); box-shadow:0 4px 10px rgba(0,0,0,0.25); }
-    header h1 { margin:0; font-size:1.6rem; letter-spacing:1px; }
-    main { flex:1; max-width:900px; margin:28px auto; padding:0 16px; box-sizing:border-box; }
-    .card {
-      background:rgba(255,255,255,0.06);
-      padding:22px;
-      border-radius:14px;
-      box-shadow:0 8px 24px rgba(0,0,0,0.25);
-      margin-bottom:18px;
-      box-sizing:border-box;
-    }
-    textarea {
-      display:block; width:100%; box-sizing:border-box;
-      padding:12px 14px; border-radius:10px;
-      border:1px solid rgba(255,255,255,0.15);
-      background:rgba(255,255,255,0.05); color:#fff;
-      outline:none; resize:vertical; font-size:0.98rem;
-      margin:8px 0 14px;
-    }
-    textarea:focus { border-color:var(--accent); box-shadow:0 0 8px rgba(255,107,129,0.18); }
-    .row { display:flex; gap:10px; align-items:flex-start; flex-wrap:wrap; }
-    .left { flex:1; }
-    .btn {
-      background:var(--accent); color:#fff; border:none; padding:10px 14px;
-      border-radius:10px; cursor:pointer; font-weight:600; transition:background 0.2s;
-    }
-    .btn:hover { background:#ff8498; }
-    .upload-label {
-      display:inline-block; padding:8px 12px; border-radius:10px;
-      background:rgba(255,255,255,0.06); cursor:pointer;
-      border:1px dashed rgba(255,255,255,0.12);
-    }
-    #imagePreview { display:none; margin-top:12px; max-width:100%; border-radius:10px; box-shadow:0 6px 18px rgba(0,0,0,0.4); }
-    .confession { margin-top:12px; padding:14px; border-radius:12px; background:rgba(255,255,255,0.03); }
-    .confession .meta { color:#dfe6ff99; font-size:0.9rem; margin-bottom:6px; }
-    .confession img { max-width:100%; border-radius:8px; margin-top:8px; display:block; }
-    .actions { margin-top:8px; display:flex; align-items:center; gap:8px; flex-wrap:wrap; }
-    .like-btn {
-      background:none; border:none; color:#ff6b81; cursor:pointer;
-      font-size:1.1rem; display:flex; align-items:center; gap:4px;
-    }
-    .like-btn.liked { color:#ffb3c1; }
-    footer {
-      text-align:center; padding:16px; font-size:0.9rem; color:#fff;
-      background:rgba(255,255,255,0.05); border-top:1px solid rgba(255,255,255,0.1);
-      position:relative; bottom:0; left:0;
-    }
-    @media(max-width:600px){ .row{flex-direction:column;} .btn{width:100%;} .upload-label{width:100%;text-align:center;} }
 
-    /* Overlay đăng nhập */
-    #loginOverlay {
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,0.75);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      z-index: 999;
-      flex-direction: column;
-      text-align: center;
-    }
-    #loginOverlay .box {
-      background: rgba(255,255,255,0.1);
-      padding: 30px;
-      border-radius: 14px;
-      box-shadow: 0 6px 20px rgba(0,0,0,0.4);
-    }
-    #loginOverlay h2 {
-      font-size: 1.3rem;
-      margin-bottom: 12px;
-    }
-    #loginOverlay button {
-      background: var(--accent);
-      color: #fff;
-      border: none;
-      padding: 10px 18px;
-      border-radius: 8px;
-      font-weight: 600;
-      cursor: pointer;
-    }
+    .header { width:100%; max-width:700px; margin-bottom:20px; display:flex; justify-content:space-between; align-items:center;}
+    .header h1 { font-size:1.8rem; }
+    .btn { padding:10px 20px; border-radius:12px; border:none; background:rgba(255,255,255,0.2); color:#fff; font-weight:600; cursor:pointer; transition:0.3s; }
+    .btn:hover { background:rgba(255,255,255,0.35); }
+
+    .new-post { width:100%; max-width:700px; background: rgba(255,255,255,0.15); backdrop-filter: blur(10px); border-radius:16px; padding:20px; display:flex; flex-direction:column; gap:10px; margin-bottom:20px; }
+    .new-post h3 { font-size:1.3rem; margin-bottom:10px; }
+    .new-post textarea { width:100%; padding:12px; border-radius:12px; border:none; background:rgba(255,255,255,0.1); color:#fff; resize:none; min-height:80px; outline:none; }
+    #imageUploadBox { padding:20px; border:2px dashed rgba(255,255,255,0.5); border-radius:15px; text-align:center; cursor:pointer; transition:0.3s; position:relative; }
+    #imageUploadBox:hover { background:rgba(255,255,255,0.1); border-color:#fff; }
+    #imageUploadBox img { max-width:100%; max-height:250px; margin-top:10px; border-radius:15px; box-shadow:0 5px 15px rgba(0,0,0,0.2); object-fit:cover; }
+    #uploadText { display:block; }
+
+    .posts { width:100%; max-width:700px; display:flex; flex-direction:column; gap:15px; }
+    .post { background: rgba(255,255,255,0.15); backdrop-filter: blur(10px); border-radius:16px; padding:15px; }
+    .post-header { display:flex; justify-content:space-between; margin-bottom:10px; font-weight:600; }
+    .post-content { margin-bottom:10px; white-space:pre-wrap; }
+    .post img { max-width:100%; border-radius:12px; margin-top:10px; box-shadow:0 5px 15px rgba(0,0,0,0.2); }
+    .post-actions { display:flex; gap:10px; }
+    .post-actions button { background:rgba(255,255,255,0.1); border:none; padding:6px 12px; border-radius:10px; cursor:pointer; transition:0.3s; color:#fff; }
+    .post-actions button:hover { background:rgba(255,255,255,0.25); }
+
+    .credit { margin-top:40px; font-size:0.8rem; color:rgba(255,255,255,0.7);}
   </style>
 </head>
 <body>
 
-  <!-- Overlay hiển thị khi chưa đăng nhập -->
-  <div id="loginOverlay" style="display:none;">
-    <div class="box">
-      <h2>🔒 Bạn cần đăng nhập để xem confession</h2>
-      <button onclick="window.location.href='login.html'">Đăng nhập ngay</button>
-    </div>
+<div class="header">
+  <h1>GDU Confession</h1>
+  <div>
+    <button class="btn" onclick="window.location.href='index.html'">Trang chủ</button>
+    <button class="btn" id="logoutBtn">Đăng xuất</button>
   </div>
+</div>
 
-  <header><h1>GIA ĐỊNH UNIVERSITY CONFESSION</h1></header>
+<!-- Form đăng bài mới trên cùng -->
+<div class="new-post">
+  <h3>Đăng bài mới</h3>
+  <textarea id="postContent" placeholder="Bạn đang nghĩ gì...?"></textarea>
+  <div id="imageUploadBox">
+    <input type="file" id="postImage" accept="image/*" hidden>
+    <span id="uploadText">📷 Chọn Ảnh</span>
+    <img id="previewImage" src="" style="display:none;">
+  </div>
+  <button class="btn" id="postBtn">Đăng</button>
+</div>
 
-  <main>
-    <div class="card">
-      <h3>Viết Confession mới</h3>
-      <textarea id="newConfession" placeholder="Nhập confession của bạn..."></textarea>
-      <div class="row">
-        <div class="left">
-          <label class="upload-label">
-            📷 Chọn ảnh
-            <input id="confessionImage" type="file" accept="image/*" style="display:none;" />
-          </label>
-          <div id="imageInfo" class="hint">(Ảnh không bắt buộc — tối đa ~10MB)</div>
-          <img id="imagePreview" alt="preview">
-        </div>
-        <div style="min-width:150px;display:flex;flex-direction:column;gap:8px;">
-          <button id="addConfessionBtn" class="btn">Gửi</button>
-          <div id="statusText" style="font-size:0.95rem;color:#fff;opacity:0.9;text-align:center;"></div>
-        </div>
-      </div>
-    </div>
+<!-- Danh sách confession hiển thị dưới form -->
+<div class="posts" id="postsContainer"></div>
 
-    <div class="card">
-      <h3>Confession mới nhất</h3>
-      <div id="listInner"></div>
-    </div>
-  </main>
+<div class="credit">Viết bởi Bảo Long</div>
 
-  <footer>Viết bởi Bảo Long - GDU Confession</footer>
+<script>
+  // Kiểm tra login
+  const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+  if(!currentUser || localStorage.getItem('loggedIn') !== 'true'){
+    alert('Bạn cần đăng nhập để vào trang này!');
+    window.location.href = 'login.html';
+  }
 
-  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+  // Logout
+  document.getElementById('logoutBtn').addEventListener('click', ()=>{
+    localStorage.removeItem('loggedIn');
+    localStorage.removeItem('currentUser');
+    window.location.href='login.html';
+  });
 
-  <script>
-    // =================== KIỂM TRA ĐĂNG NHẬP ===================
-    const currentUser = JSON.parse(localStorage.getItem("currentUser"));
-    const loggedIn = localStorage.getItem("loggedIn");
+  // Upload ảnh
+  const imageUploadBox = document.getElementById('imageUploadBox');
+  const postImageInput = document.getElementById('postImage');
+  const previewImage = document.getElementById('previewImage');
+  const uploadText = document.getElementById('uploadText');
 
-    const overlay = document.getElementById("loginOverlay");
-
-    if (!currentUser || loggedIn !== "true") {
-      overlay.style.display = "flex";
-      document.body.style.overflow = "hidden";
-    }
-
-    const username = currentUser?.name || "Ẩn danh";
-
-    // =================== ĐĂNG CONFESSION ===================
-    const fileInput = document.getElementById("confessionImage");
-    const preview = document.getElementById("imagePreview");
-    const btn = document.getElementById("addConfessionBtn");
-    const statusText = document.getElementById("statusText");
-    const listInner = document.getElementById("listInner");
-    let imageFile = null;
-
-    fileInput.addEventListener("change", e => {
-      const f = e.target.files[0];
-      if (!f) { preview.style.display="none"; return; }
-      if (f.size > 10*1024*1024) { alert("Ảnh quá lớn (>10MB)!"); return; }
-      imageFile = f;
-      preview.src = URL.createObjectURL(f);
-      preview.style.display = "block";
-      document.getElementById("imageInfo").textContent = `Đã chọn: ${f.name}`;
-    });
-    
-    async function uploadToImgBB(file) {
-      const base64 = await new Promise((res,rej)=>{
-        const r = new FileReader();
-        r.onload = ()=>res(r.result.split(",")[1]); r.onerror=rej;
-        r.readAsDataURL(file);
-      });
-      const form = new FormData();
-      form.append("image", base64);
-      const res = await fetch(`https://api.imgbb.com/1/upload?key=${IMGBB_API_KEY}`, {method:"POST", body:form});
-      const json = await res.json();
-      if (!res.ok || json.status !== 200) throw new Error("Upload thất bại");
-      return json.data.url;
-    }
-
-    btn.onclick = async () => {
-      const text = document.getElementById("newConfession").value.trim();
-      if (!text && !imageFile) return alert("Vui lòng nhập nội dung hoặc chọn ảnh!");
-      if (!currentUser) return alert("Bạn cần đăng nhập để gửi bài!");
-
-      btn.disabled = true;
-      statusText.textContent = "Đang gửi...";
-
-      try {
-        let imageUrl = "";
-        if (imageFile) imageUrl = await uploadToImgBB(imageFile);
-
-        await db.collection("confessions").add({
-          text, author: username, imageUrl,
-          likes: [], comments: [],
-          createdAt: firebase.firestore.FieldValue.serverTimestamp()
-        });
-
-        document.getElementById("newConfession").value = "";
-        fileInput.value = ""; preview.style.display = "none";
-        imageFile = null;
-        statusText.textContent = "Đăng thành công 🎉";
-        setTimeout(()=>statusText.textContent="",2000);
-      } catch(e){ alert("Lỗi: "+e.message); }
-      btn.disabled = false;
-    };
-
-    // =================== HIỂN THỊ CONFESSION ===================
-    db.collection("confessions").orderBy("createdAt","desc").onSnapshot(snap=>{
-      listInner.innerHTML="";
-      snap.forEach(doc=>{
-        const d=doc.data();
-        const id=doc.id;
-        const liked = d.likes?.includes(username);
-        const div=document.createElement("div");
-        div.className="confession";
-        div.innerHTML=`
-          <div class="meta">👤 <strong>${d.author}</strong> • ${d.createdAt?.toDate?.().toLocaleString()||""}</div>
-          <div class="text">${d.text}</div>
-          ${d.imageUrl?`<img src="${d.imageUrl}">`:""}
-          <div class="actions">
-            <button class="like-btn ${liked?"liked":""}" onclick="toggleLike('${id}', ${JSON.stringify(d.likes||[]).replace(/"/g,'&quot;')})">
-              ❤️ ${d.likes?.length||0}
-            </button>
-            <span style="font-size:0.85rem;opacity:0.8;">${(d.likes||[]).join(', ')}</span>
-          </div>
-        `;
-        listInner.appendChild(div);
-      });
-    });
-
-    async function toggleLike(id, likes){
-      const ref=db.collection("confessions").doc(id);
-      if(likes.includes(username)){
-        await ref.update({likes: firebase.firestore.FieldValue.arrayRemove(username)});
-      }else{
-        await ref.update({likes: firebase.firestore.FieldValue.arrayUnion(username)});
+  imageUploadBox.addEventListener('click', ()=> postImageInput.click());
+  postImageInput.addEventListener('change', ()=> {
+    const file = postImageInput.files[0];
+    if(file){
+      const reader = new FileReader();
+      reader.onload = (e)=>{
+        previewImage.src = e.target.result;
+        previewImage.style.display = 'block';
+        uploadText.style.display = 'none';
       }
+      reader.readAsDataURL(file);
+    } else {
+      previewImage.style.display = 'none';
+      uploadText.style.display = 'block';
     }
-  </script>
+  });
+  imageUploadBox.addEventListener('dragover', e=>{ e.preventDefault(); imageUploadBox.style.background='rgba(255,255,255,0.15)'; });
+  imageUploadBox.addEventListener('dragleave', e=>{ e.preventDefault(); imageUploadBox.style.background='transparent'; });
+  imageUploadBox.addEventListener('drop', e=>{
+    e.preventDefault();
+    const file = e.dataTransfer.files[0];
+    if(file && file.type.startsWith('image/')){
+      postImageInput.files = e.dataTransfer.files;
+      const reader = new FileReader();
+      reader.onload = (ev)=>{
+        previewImage.src = ev.target.result;
+        previewImage.style.display = 'block';
+        uploadText.style.display = 'none';
+      }
+      reader.readAsDataURL(file);
+    }
+  });
+
+  // Post bài
+  const postBtn = document.getElementById('postBtn');
+  const postsContainer = document.getElementById('postsContainer');
+
+  function loadPosts(){
+    const posts = JSON.parse(localStorage.getItem('posts')) || [];
+    postsContainer.innerHTML = '';
+    posts.reverse().forEach((p,i)=>{
+      const div = document.createElement('div');
+      div.classList.add('post');
+      div.innerHTML = `
+        <div class="post-header">${p.user}</div>
+        <div class="post-content">${p.content}</div>
+        ${p.image ? `<img src="${p.image}">` : ''}
+        <div class="post-actions">
+          <button data-id="${posts.length - 1 - i}" class="likeBtn">❤️ ${p.likes.length}</button>
+        </div>
+      `;
+      postsContainer.appendChild(div);
+    });
+
+    // Thêm sự kiện like
+    document.querySelectorAll('.likeBtn').forEach(btn=>{
+      btn.addEventListener('click', ()=>{
+        const idx = btn.getAttribute('data-id');
+        let posts = JSON.parse(localStorage.getItem('posts')) || [];
+        if(!posts[idx].likes.includes(currentUser.name)){
+          posts[idx].likes.push(currentUser.name);
+          localStorage.setItem('posts', JSON.stringify(posts));
+          loadPosts();
+        } else {
+          alert('Bạn đã like bài này rồi!');
+        }
+      });
+    });
+  }
+
+  postBtn.addEventListener('click', ()=>{
+    const content = document.getElementById('postContent').value.trim();
+    const image = previewImage.src || '';
+    if(!content && !postImageInput.files[0]){
+      alert('Vui lòng nhập nội dung hoặc chọn ảnh!');
+      return;
+    }
+    const posts = JSON.parse(localStorage.getItem('posts')) || [];
+    posts.push({ user: currentUser.name, content, image: image && postImageInput.files[0] ? image : '', likes: [] });
+    localStorage.setItem('posts', JSON.stringify(posts));
+
+    // Reset form
+    document.getElementById('postContent').value = '';
+    postImageInput.value = '';
+    previewImage.src='';
+    previewImage.style.display='none';
+    uploadText.style.display='block';
+    loadPosts();
+  });
+
+  loadPosts();
+</script>
 </body>
 </html>
 
