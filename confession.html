@@ -22,10 +22,7 @@
     }
     header h1 { font-size: 1.8rem; }
     nav a {
-      color: white;
-      margin: 0 10px;
-      text-decoration: none;
-      transition: 0.3s;
+      color: white; margin: 0 10px; text-decoration: none; transition: 0.3s;
     }
     nav a:hover { color: #ff6b81; }
     main {
@@ -40,7 +37,6 @@
       border-radius: 16px;
       margin-bottom: 20px;
       box-shadow: 0 8px 20px rgba(0,0,0,0.2);
-      color: #fff;
     }
     .confession-text { font-size: 1.1rem; margin-bottom: 10px; white-space: pre-wrap; }
     .confession-image {
@@ -57,9 +53,7 @@
     }
     .confession-actions button.liked { color: #ff6b81; }
     .comment-section { margin-top: 10px; }
-    .comment-box {
-      display: flex; gap: 10px; margin-top: 10px;
-    }
+    .comment-box { display: flex; gap: 10px; margin-top: 10px; }
     .comment-box input {
       flex: 1; padding: 8px 10px; border-radius: 10px;
       border: 1px solid rgba(255,255,255,0.4); outline: none;
@@ -79,7 +73,6 @@
       text-align: center; padding: 10px;
       background: rgba(255,255,255,0.1);
     }
-    /* Upload ảnh đẹp */
     .upload-container {
       display: flex; align-items: center; gap: 10px; margin-top: 10px;
     }
@@ -109,7 +102,7 @@
       <h2>Viết Confession mới</h2>
       <div class="comment-box">
         <input type="text" id="newConfession" placeholder="Nhập confession của bạn..." />
-        <button id="addConfessionBtn">Gửi</button>
+        <button id="addConfessionBtn" type="button">Gửi</button>
       </div>
       <div class="upload-container">
         <label class="upload-label" for="confessionImage">📷 Tải ảnh lên</label>
@@ -133,138 +126,152 @@
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-storage.js"></script>
 
   <script>
-    // --- Kiểm tra đăng nhập ---
-    const isLoggedIn = localStorage.getItem("loggedIn");
-    const currentUser = JSON.parse(localStorage.getItem("currentUser"));
-    if (!isLoggedIn || !currentUser) {
-      alert("Vui lòng đăng nhập để xem Confession");
-      window.location.href = "login.html";
-    }
+    document.addEventListener("DOMContentLoaded", () => {
 
-    // --- Firebase config ---
-    const firebaseConfig = {
-      apiKey: "AIzaSyACpNff8xGZ-FNmngsDA7mRk8m7G_gFXlo",
-      authDomain: "newweb-97f09.firebaseapp.com",
-      projectId: "newweb-97f09",
-      storageBucket: "newweb-97f09.appspot.com"
-    };
-    firebase.initializeApp(firebaseConfig);
-    const db = firebase.firestore();
-    const storage = firebase.storage();
-
-    const container = document.getElementById("confessionContainer");
-
-    // --- Hiển thị preview ảnh ---
-    const fileInput = document.getElementById("confessionImage");
-    const preview = document.getElementById("imagePreview");
-    let imageFile = null;
-
-    fileInput.onchange = (e) => {
-      const file = e.target.files[0];
-      if (file) {
-        imageFile = file;
-        preview.src = URL.createObjectURL(file);
-        preview.style.display = "block";
+      // ---- Kiểm tra đăng nhập ----
+      const isLoggedIn = localStorage.getItem("loggedIn");
+      const currentUser = JSON.parse(localStorage.getItem("currentUser"));
+      if (!isLoggedIn || !currentUser) {
+        alert("Vui lòng đăng nhập để xem Confession");
+        window.location.href = "login.html";
+        return;
       }
-    };
 
-    // --- Hiển thị Confession ---
-    function renderConfessions(confessions) {
-      container.innerHTML = "<h2>Confession mới nhất</h2>";
-      confessions.forEach((conf) => {
-        const likedList = JSON.parse(localStorage.getItem("likedConfessions") || "[]");
-        const liked = likedList.includes(conf.id);
+      // ---- Cấu hình Firebase ----
+      const firebaseConfig = {
+  apiKey: "AIzaSy...",
+  authDomain: "newweb-97f09.firebaseapp.com",
+  projectId: "newweb-97f09",
+  storageBucket: "newweb-97f09.appspot.com",
+  messagingSenderId: "908756248192",
+  appId: "1:908756248192:web:0a6cd7b2f5aa94be4a40c7"
+};
 
-        const card = document.createElement("div");
-        card.className = "confession-card";
-        card.innerHTML = `
-          <div class="confession-text">${conf.text}</div>
-          ${conf.imageUrl ? `<img class="confession-image" src="${conf.imageUrl}" alt="confession image">` : ""}
-          <div class="confession-actions">
-            <button class="like-btn ${liked ? "liked" : ""}" data-id="${conf.id}">
-              ❤️ <span>${conf.likes || 0}</span>
-            </button>
-          </div>
-          <div class="comment-section">
-            <h4>Bình luận:</h4>
-            <div class="comment-list">
-              ${(conf.comments || []).map(c => `<p>${c}</p>`).join('')}
-            </div>
-            <div class="comment-box">
-              <input type="text" placeholder="Viết bình luận..." class="comment-input" data-id="${conf.id}">
-              <button class="comment-btn" data-id="${conf.id}">Gửi</button>
-            </div>
-          </div>
-        `;
-        container.appendChild(card);
+      if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
+
+      const db = firebase.firestore();
+      const storage = firebase.storage();
+
+      const container = document.getElementById("confessionContainer");
+      const addBtn = document.getElementById("addConfessionBtn");
+      const inputText = document.getElementById("newConfession");
+      const fileInput = document.getElementById("confessionImage");
+      const preview = document.getElementById("imagePreview");
+      let imageFile = null;
+
+      // ---- Hiển thị preview ảnh ----
+      fileInput.addEventListener("change", e => {
+        const file = e.target.files[0];
+        if (file) {
+          imageFile = file;
+          preview.src = URL.createObjectURL(file);
+          preview.style.display = "block";
+        }
       });
 
-      // --- Like ---
-      document.querySelectorAll(".like-btn").forEach(btn => {
-        btn.onclick = async () => {
-          const id = btn.getAttribute("data-id");
-          let likedList = JSON.parse(localStorage.getItem("likedConfessions") || "[]");
-          if (likedList.includes(id)) return; // chỉ 1 lần
+      // ---- Render confession ----
+      function renderConfessions(list) {
+        container.innerHTML = "<h2>Confession mới nhất</h2>";
+        list.forEach(conf => {
+          const likedList = JSON.parse(localStorage.getItem("likedConfessions") || "[]");
+          const liked = likedList.includes(conf.id);
+          const card = document.createElement("div");
+          card.className = "confession-card";
+          card.innerHTML = `
+            <div class="confession-text">${conf.text}</div>
+            ${conf.imageUrl ? `<img class="confession-image" src="${conf.imageUrl}">` : ""}
+            <div class="confession-actions">
+              <button class="like-btn ${liked ? "liked" : ""}" data-id="${conf.id}">❤️ <span>${conf.likes || 0}</span></button>
+            </div>
+            <div class="comment-section">
+              <h4>Bình luận:</h4>
+              <div class="comment-list">
+                ${(conf.comments || []).map(c => `<p>${c}</p>`).join("")}
+              </div>
+              <div class="comment-box">
+                <input type="text" class="comment-input" placeholder="Viết bình luận..." data-id="${conf.id}">
+                <button class="comment-btn" data-id="${conf.id}" type="button">Gửi</button>
+              </div>
+            </div>`;
+          container.appendChild(card);
+        });
 
-          const docRef = db.collection("confessions").doc(id);
-          await docRef.update({ likes: firebase.firestore.FieldValue.increment(1) });
+        // ---- Like ----
+        container.querySelectorAll(".like-btn").forEach(btn => {
+          btn.addEventListener("click", async () => {
+            const id = btn.dataset.id;
+            const likedList = JSON.parse(localStorage.getItem("likedConfessions") || "[]");
+            if (likedList.includes(id)) return;
+            await db.collection("confessions").doc(id).update({
+              likes: firebase.firestore.FieldValue.increment(1)
+            });
+            likedList.push(id);
+            localStorage.setItem("likedConfessions", JSON.stringify(likedList));
+          });
+        });
 
-          likedList.push(id);
-          localStorage.setItem("likedConfessions", JSON.stringify(likedList));
-        };
+        // ---- Bình luận ----
+        container.querySelectorAll(".comment-btn").forEach(btn => {
+          btn.addEventListener("click", async () => {
+            const id = btn.dataset.id;
+            const input = container.querySelector(`.comment-input[data-id="${id}"]`);
+            const text = input.value.trim();
+            if (!text) return;
+            await db.collection("confessions").doc(id).update({
+              comments: firebase.firestore.FieldValue.arrayUnion(`${currentUser.name}: ${text}`)
+            });
+            input.value = "";
+          });
+        });
+      }
+
+      // ---- Lắng nghe realtime ----
+      db.collection("confessions").orderBy("createdAt", "desc").onSnapshot(snap => {
+        const list = snap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+        renderConfessions(list);
       });
 
-      // --- Bình luận ---
-      document.querySelectorAll(".comment-btn").forEach(btn => {
-        btn.onclick = async () => {
-          const id = btn.getAttribute("data-id");
-          const input = document.querySelector(`.comment-input[data-id="${id}"]`);
-          const text = input.value.trim();
-          if (!text) return;
+      // ---- Gửi confession mới ----
+      addBtn.addEventListener("click", async () => {
+        const text = inputText.value.trim();
+        if (!text && !imageFile) {
+          alert("Vui lòng nhập confession hoặc chọn ảnh!");
+          return;
+        }
 
-          const docRef = db.collection("confessions").doc(id);
-          await docRef.update({
-            comments: firebase.firestore.FieldValue.arrayUnion(`${currentUser.name}: ${text}`)
+        addBtn.disabled = true;
+        addBtn.textContent = "Đang gửi...";
+
+        try {
+          let imageUrl = "";
+          if (imageFile) {
+            const ref = storage.ref(`confessions/${Date.now()}_${imageFile.name}`);
+            await ref.put(imageFile);
+            imageUrl = await ref.getDownloadURL();
+          }
+
+          await db.collection("confessions").add({
+            text,
+            imageUrl,
+            likes: 0,
+            comments: [],
+            createdAt: firebase.firestore.Timestamp.now(),
+            author: currentUser.name || "Ẩn danh"
           });
 
-          input.value = "";
-        };
-      });
-    }
+          inputText.value = "";
+          preview.style.display = "none";
+          fileInput.value = "";
+          imageFile = null;
+        } catch (err) {
+          console.error(err);
+          alert("Không thể gửi confession. Vui lòng thử lại!");
+        }
 
-    // --- Realtime update ---
-    db.collection("confessions").orderBy("createdAt", "desc").onSnapshot(snapshot => {
-      const confessions = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-      renderConfessions(confessions);
+        addBtn.disabled = false;
+        addBtn.textContent = "Gửi";
+      });
     });
-
-    // --- Thêm confession mới ---
-    document.getElementById("addConfessionBtn").onclick = async () => {
-      const text = document.getElementById("newConfession").value.trim();
-      if (!text && !imageFile) return alert("Vui lòng nhập confession hoặc chọn ảnh!");
-
-      let imageUrl = "";
-      if (imageFile) {
-        const ref = storage.ref(`confessions/${Date.now()}_${imageFile.name}`);
-        await ref.put(imageFile);
-        imageUrl = await ref.getDownloadURL();
-      }
-
-      await db.collection("confessions").add({
-        text,
-        imageUrl,
-        likes: 0,
-        comments: [],
-        createdAt: new Date(),
-        author: currentUser.name || "Ẩn danh"
-      });
-
-      document.getElementById("newConfession").value = "";
-      preview.style.display = "none";
-      fileInput.value = "";
-      imageFile = null;
-    };
   </script>
 </body>
 </html>
-
