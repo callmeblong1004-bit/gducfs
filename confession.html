@@ -10,46 +10,163 @@
     body {
       font-family: "Poppins", sans-serif;
       background: linear-gradient(135deg,#2b1055,#7597de);
-      color: #fff; margin:0; min-height:100vh;
+      color: #fff;
+      margin:0;
+      min-height:100vh;
       -webkit-font-smoothing:antialiased;
     }
-    header { text-align:center; padding:22px 16px; background: rgba(255,255,255,0.04); box-shadow: 0 4px 10px rgba(0,0,0,0.25); }
-    header h1 { margin:0; font-size:1.6rem; letter-spacing:1px; }
-    main { max-width:900px; margin:28px auto; padding:0 16px; }
-    .card { background: rgba(255,255,255,0.06); padding:18px; border-radius:14px; box-shadow: 0 8px 24px rgba(0,0,0,0.25); margin-bottom:18px; }
+
+    header {
+      text-align:center;
+      padding:22px 16px;
+      background: rgba(255,255,255,0.04);
+      box-shadow: 0 4px 10px rgba(0,0,0,0.25);
+    }
+    header h1 {
+      margin:0;
+      font-size:1.6rem;
+      letter-spacing:1px;
+    }
+
+    main {
+      max-width:900px;
+      margin:28px auto;
+      padding:0 16px;
+      box-sizing:border-box;
+    }
+
+    .card {
+      background: rgba(255,255,255,0.06);
+      padding:22px;
+      border-radius:14px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.25);
+      margin-bottom:18px;
+      box-sizing: border-box;
+      overflow: hidden;
+    }
+
     input[type="text"], textarea {
-      width:100%; padding:10px 12px; border-radius:10px;
-      border:1px solid rgba(255,255,255,0.12); background: rgba(255,255,255,0.03); color:#fff; outline:none; resize:vertical;
+      display:block;
+      width:100%;
+      box-sizing:border-box;
+      padding:12px 14px;
+      border-radius:10px;
+      border:1px solid rgba(255,255,255,0.15);
+      background: rgba(255,255,255,0.05);
+      color:#fff;
+      outline:none;
+      resize:vertical;
       font-size:0.98rem;
+      margin:8px 0 14px;
     }
-    input[type="text"]:focus, textarea:focus { border-color: var(--accent); box-shadow:0 0 8px rgba(255,107,129,0.14); }
-    textarea { min-height:72px; }
-    .row { display:flex; gap:10px; align-items:center; }
+
+    input[type="text"]:focus, textarea:focus {
+      border-color: var(--accent);
+      box-shadow:0 0 8px rgba(255,107,129,0.18);
+    }
+
+    textarea { min-height:90px; }
+
+    .row {
+      display:flex;
+      gap:10px;
+      align-items:flex-start;
+      flex-wrap: wrap;
+    }
+
     .left { flex:1; }
+
     .btn {
-      background:var(--accent); color:#fff; border:none; padding:10px 14px; border-radius:10px; cursor:pointer; font-weight:600;
+      background:var(--accent);
+      color:#fff;
+      border:none;
+      padding:10px 14px;
+      border-radius:10px;
+      cursor:pointer;
+      font-weight:600;
+      transition: background 0.2s;
     }
+
+    .btn:hover { background:#ff8498; }
     .btn[disabled] { opacity:0.7; cursor:default; }
+
     .upload-label {
-      display:inline-block; padding:8px 12px; border-radius:10px; background:rgba(255,255,255,0.06); cursor:pointer; border:1px dashed rgba(255,255,255,0.06);
+      display:inline-block;
+      padding:8px 12px;
+      border-radius:10px;
+      background:rgba(255,255,255,0.06);
+      cursor:pointer;
+      border:1px dashed rgba(255,255,255,0.12);
+      transition:background 0.2s, border-color 0.2s;
     }
-    #imagePreview { display:none; margin-top:12px; max-width:100%; border-radius:10px; box-shadow:0 6px 18px rgba(0,0,0,0.4); }
+
+    .upload-label:hover {
+      background:rgba(255,255,255,0.1);
+      border-color:rgba(255,255,255,0.25);
+    }
+
+    #imagePreview {
+      display:none;
+      margin-top:12px;
+      max-width:100%;
+      border-radius:10px;
+      box-shadow:0 6px 18px rgba(0,0,0,0.4);
+    }
+
     .loader {
-      display:inline-block; width:34px; height:34px; border-radius:50%; border:4px solid rgba(255,255,255,0.12); border-top:4px solid var(--accent);
-      animation:spin .9s linear infinite; vertical-align:middle; margin-left:10px;
+      display:inline-block;
+      width:34px;
+      height:34px;
+      border-radius:50%;
+      border:4px solid rgba(255,255,255,0.12);
+      border-top:4px solid var(--accent);
+      animation:spin .9s linear infinite;
+      vertical-align:middle;
+      margin-left:10px;
     }
+
     @keyframes spin { to { transform:rotate(360deg); } }
 
-    /* confession list */
     .confession-list .confession {
-      margin-top:12px; padding:14px; border-radius:12px; background: rgba(255,255,255,0.03);
+      margin-top:12px;
+      padding:14px;
+      border-radius:12px;
+      background: rgba(255,255,255,0.03);
     }
-    .confession .meta { color:#dfe6ff77; font-size:0.88rem; margin-bottom:6px; }
-    .confession img { max-width:100%; border-radius:8px; margin-top:8px; display:block; }
 
-    .hint { color:#e6e6e6aa; font-size:0.9rem; margin-top:6px; }
-    footer { text-align:center; color:#eee; opacity:0.8; padding:14px 0; margin-top:20px; }
-    @media (max-width:600px){ .row { flex-direction:column; } .btn { width:100%; } .upload-label{width:100%; text-align:center;} }
+    .confession .meta {
+      color:#dfe6ff99;
+      font-size:0.9rem;
+      margin-bottom:6px;
+    }
+
+    .confession img {
+      max-width:100%;
+      border-radius:8px;
+      margin-top:8px;
+      display:block;
+    }
+
+    .hint {
+      color:#e6e6e6aa;
+      font-size:0.9rem;
+      margin-top:6px;
+    }
+
+    footer {
+      text-align:center;
+      color:#eee;
+      opacity:0.8;
+      padding:14px 0;
+      margin-top:20px;
+      font-size:0.9rem;
+    }
+
+    @media (max-width:600px){
+      .row { flex-direction:column; }
+      .btn { width:100%; }
+      .upload-label{width:100%; text-align:center;}
+    }
   </style>
 </head>
 <body>
@@ -61,18 +178,10 @@
     <div class="card">
       <h3>Viết Confession mới</h3>
 
-      <!-- Tên (decor) -->
-      <div style="margin:10px 0;">
-        <input id="senderName" type="text" placeholder="Nhập tên (hoặc để trống để ẩn danh)" />
-      </div>
+      <input id="senderName" type="text" placeholder="Nhập tên (hoặc để trống để ẩn danh)" />
+      <textarea id="newConfession" placeholder="Nhập confession của bạn..."></textarea>
 
-      <!-- Confession text -->
-      <div style="margin-bottom:10px;">
-        <textarea id="newConfession" placeholder="Nhập confession của bạn..."></textarea>
-      </div>
-
-      <!-- Upload + preview + send -->
-      <div class="row" style="align-items:flex-start;">
+      <div class="row">
         <div class="left">
           <label class="upload-label">
             📷 Chọn ảnh
@@ -94,7 +203,6 @@
       <div class="hint" style="margin-top:12px;">Lưu ý: Ảnh được upload lên ImgBB (miễn phí), nội dung được lưu trên Firebase Firestore.</div>
     </div>
 
-    <!-- Danh sách confession -->
     <div class="card confession-list" id="confessionContainer">
       <h3>Confession mới nhất</h3>
       <div id="listInner"></div>
@@ -108,22 +216,17 @@
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
 
   <script>
-    // --------- CẤU HÌNH (Thay 2 chỗ này) ----------
-    const IMGBB_API_KEY = "46ccb22e2eddd283211566a5482eef7b"; // <-- thay bằng API key từ imgbb.com
+    const IMGBB_API_KEY = "46ccb22e2eddd283211566a5482eef7b";
     const firebaseConfig = {
       apiKey: "AIzaSyACpNff8xGZ-FNmngsDA7mRk8m7G_gFXlo",
       authDomain: "newweb-97f09.firebaseapp.com",
       projectId: "newweb-97f09",
       storageBucket: "newweb-97f09.appspot.com"
-      // nếu có thêm fields (messagingSenderId, appId) thì tốt, nhưng không bắt buộc
     };
-    // ---------------------------------------------
 
-    // Init Firebase
     firebase.initializeApp(firebaseConfig);
     const db = firebase.firestore();
 
-    // DOM
     const fileInput = document.getElementById("confessionImage");
     const preview = document.getElementById("imagePreview");
     const imageInfo = document.getElementById("imageInfo");
@@ -131,10 +234,8 @@
     const loader = document.getElementById("loader");
     const statusText = document.getElementById("statusText");
     const listInner = document.getElementById("listInner");
-
     let imageFile = null;
 
-    // Preview khi chọn ảnh
     fileInput.addEventListener("change", (e) => {
       const f = e.target.files[0];
       if (!f) {
@@ -143,7 +244,7 @@
         imageInfo.textContent = "(Ảnh không bắt buộc — tối đa ~10MB)";
         return;
       }
-      if (f.size > 10 * 1024 * 1024) { // 10MB limit
+      if (f.size > 10 * 1024 * 1024) {
         alert("Ảnh quá lớn (>10MB). Vui lòng chọn ảnh nhỏ hơn.");
         fileInput.value = "";
         return;
@@ -154,42 +255,34 @@
       imageInfo.textContent = `Đã chọn: ${f.name} (${Math.round(f.size/1024)} KB)`;
     });
 
-    // Hàm helper: convert file -> base64 (string without prefix)
     function fileToBase64(file) {
       return new Promise((resolve, reject) => {
         const reader = new FileReader();
         reader.onerror = () => reject(new Error("Không đọc được file ảnh"));
         reader.onload = () => {
-          const result = reader.result; // data:*/*;base64,xxxxx
-          // remove prefix "data:image/xxx;base64,"
+          const result = reader.result;
           const idx = result.indexOf("base64,");
-          if (idx === -1) return resolve(result);
-          resolve(result.substring(idx + 7));
+          resolve(idx === -1 ? result : result.substring(idx + 7));
         };
         reader.readAsDataURL(file);
       });
     }
 
-    // Upload ảnh lên ImgBB, trả về URL hoặc throw lỗi
     async function uploadToImgBB(file) {
       if (!file) return "";
-      // chuyển sang base64
       const base64 = await fileToBase64(file);
       const form = new FormData();
       form.append("image", base64);
-      // optional: form.append("name", "myfile");
       const url = `https://api.imgbb.com/1/upload?key=${encodeURIComponent(IMGBB_API_KEY)}`;
       const res = await fetch(url, { method: "POST", body: form });
       const json = await res.json();
       if (!res.ok || json.status !== 200) {
-        // lấy message chi tiết nếu có
-        const errMsg = (json && json.error && json.error.message) ? json.error.message : JSON.stringify(json);
+        const errMsg = json?.error?.message || JSON.stringify(json);
         throw new Error("ImgBB upload failed: " + errMsg);
       }
       return json.data.url;
     }
 
-    // Gửi confession: upload ảnh (nếu có) -> lưu Firestore
     btn.addEventListener("click", async () => {
       const text = document.getElementById("newConfession").value.trim();
       const author = document.getElementById("senderName").value.trim() || "Ẩn danh";
@@ -198,7 +291,6 @@
         return;
       }
 
-      // UI trạng thái
       btn.disabled = true;
       loader.style.display = "inline-block";
       statusText.textContent = "Đang xử lý...";
@@ -207,9 +299,7 @@
         let imageUrl = "";
         if (imageFile) {
           statusText.textContent = "Đang tải ảnh lên ImgBB...";
-          // thử upload
           imageUrl = await uploadToImgBB(imageFile);
-          statusText.textContent = "Ảnh đã upload";
         }
 
         statusText.textContent = "Đang lưu confession...";
@@ -222,7 +312,6 @@
           createdAt: firebase.firestore.FieldValue.serverTimestamp()
         });
 
-        // reset form
         document.getElementById("newConfession").value = "";
         document.getElementById("senderName").value = "";
         preview.style.display = "none";
@@ -241,14 +330,13 @@
       }
     });
 
-    // Hiển thị danh sách realtime
     db.collection("confessions").orderBy("createdAt","desc").onSnapshot(snapshot => {
       listInner.innerHTML = "";
       snapshot.forEach(doc => {
         const d = doc.data();
         const wrapper = document.createElement("div");
         wrapper.className = "confession";
-        const timeText = d.createdAt && d.createdAt.toDate ? d.createdAt.toDate().toLocaleString() : "";
+        const timeText = d.createdAt?.toDate ? d.createdAt.toDate().toLocaleString() : "";
         wrapper.innerHTML = `
           <div class="meta">👤 <strong>${escapeHtml(d.author || "Ẩn danh")}</strong> • <span style="opacity:0.8">${timeText}</span></div>
           <div class="text">${escapeHtml(d.text || "")}</div>
@@ -261,7 +349,6 @@
       listInner.innerHTML = "<div style='color:#ffd6d6'>Không thể đọc dữ liệu. Kiểm tra console.</div>";
     });
 
-    // small helpers to escape HTML (basic)
     function escapeHtml(str) {
       if (!str) return "";
       return String(str)
@@ -275,5 +362,4 @@
   </script>
 </body>
 </html>
-
 
