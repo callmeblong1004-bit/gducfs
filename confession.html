@@ -13,197 +13,125 @@
       color: #fff;
       margin:0;
       min-height:100vh;
-      -webkit-font-smoothing:antialiased;
+      display: flex;
+      flex-direction: column;
+      overflow-x: hidden;
     }
-
-    header {
-      text-align:center;
-      padding:22px 16px;
-      background: rgba(255,255,255,0.04);
-      box-shadow: 0 4px 10px rgba(0,0,0,0.25);
-    }
-    header h1 {
-      margin:0;
-      font-size:1.6rem;
-      letter-spacing:1px;
-    }
-
-    main {
-      max-width:900px;
-      margin:28px auto;
-      padding:0 16px;
-      box-sizing:border-box;
-    }
-
+    header { text-align:center; padding:22px 16px; background:rgba(255,255,255,0.04); box-shadow:0 4px 10px rgba(0,0,0,0.25); }
+    header h1 { margin:0; font-size:1.6rem; letter-spacing:1px; }
+    main { flex:1; max-width:900px; margin:28px auto; padding:0 16px; box-sizing:border-box; }
     .card {
-      background: rgba(255,255,255,0.06);
+      background:rgba(255,255,255,0.06);
       padding:22px;
       border-radius:14px;
-      box-shadow: 0 8px 24px rgba(0,0,0,0.25);
+      box-shadow:0 8px 24px rgba(0,0,0,0.25);
       margin-bottom:18px;
-      box-sizing: border-box;
-      overflow: hidden;
-    }
-
-    input[type="text"], textarea {
-      display:block;
-      width:100%;
       box-sizing:border-box;
-      padding:12px 14px;
-      border-radius:10px;
+    }
+    textarea {
+      display:block; width:100%; box-sizing:border-box;
+      padding:12px 14px; border-radius:10px;
       border:1px solid rgba(255,255,255,0.15);
-      background: rgba(255,255,255,0.05);
-      color:#fff;
-      outline:none;
-      resize:vertical;
-      font-size:0.98rem;
+      background:rgba(255,255,255,0.05); color:#fff;
+      outline:none; resize:vertical; font-size:0.98rem;
       margin:8px 0 14px;
     }
-
-    input[type="text"]:focus, textarea:focus {
-      border-color: var(--accent);
-      box-shadow:0 0 8px rgba(255,107,129,0.18);
-    }
-
-    textarea { min-height:90px; }
-
-    .row {
-      display:flex;
-      gap:10px;
-      align-items:flex-start;
-      flex-wrap: wrap;
-    }
-
+    textarea:focus { border-color:var(--accent); box-shadow:0 0 8px rgba(255,107,129,0.18); }
+    .row { display:flex; gap:10px; align-items:flex-start; flex-wrap:wrap; }
     .left { flex:1; }
-
     .btn {
-      background:var(--accent);
-      color:#fff;
-      border:none;
-      padding:10px 14px;
-      border-radius:10px;
-      cursor:pointer;
-      font-weight:600;
-      transition: background 0.2s;
+      background:var(--accent); color:#fff; border:none; padding:10px 14px;
+      border-radius:10px; cursor:pointer; font-weight:600; transition:background 0.2s;
     }
-
     .btn:hover { background:#ff8498; }
-    .btn[disabled] { opacity:0.7; cursor:default; }
-
     .upload-label {
-      display:inline-block;
-      padding:8px 12px;
-      border-radius:10px;
-      background:rgba(255,255,255,0.06);
-      cursor:pointer;
+      display:inline-block; padding:8px 12px; border-radius:10px;
+      background:rgba(255,255,255,0.06); cursor:pointer;
       border:1px dashed rgba(255,255,255,0.12);
-      transition:background 0.2s, border-color 0.2s;
     }
-
-    .upload-label:hover {
-      background:rgba(255,255,255,0.1);
-      border-color:rgba(255,255,255,0.25);
+    #imagePreview { display:none; margin-top:12px; max-width:100%; border-radius:10px; box-shadow:0 6px 18px rgba(0,0,0,0.4); }
+    .confession { margin-top:12px; padding:14px; border-radius:12px; background:rgba(255,255,255,0.03); }
+    .confession .meta { color:#dfe6ff99; font-size:0.9rem; margin-bottom:6px; }
+    .confession img { max-width:100%; border-radius:8px; margin-top:8px; display:block; }
+    .actions { margin-top:8px; display:flex; align-items:center; gap:8px; flex-wrap:wrap; }
+    .like-btn {
+      background:none; border:none; color:#ff6b81; cursor:pointer;
+      font-size:1.1rem; display:flex; align-items:center; gap:4px;
     }
-
-    #imagePreview {
-      display:none;
-      margin-top:12px;
-      max-width:100%;
-      border-radius:10px;
-      box-shadow:0 6px 18px rgba(0,0,0,0.4);
-    }
-
-    .loader {
-      display:inline-block;
-      width:34px;
-      height:34px;
-      border-radius:50%;
-      border:4px solid rgba(255,255,255,0.12);
-      border-top:4px solid var(--accent);
-      animation:spin .9s linear infinite;
-      vertical-align:middle;
-      margin-left:10px;
-    }
-
-    @keyframes spin { to { transform:rotate(360deg); } }
-
-    .confession-list .confession {
-      margin-top:12px;
-      padding:14px;
-      border-radius:12px;
-      background: rgba(255,255,255,0.03);
-    }
-
-    .confession .meta {
-      color:#dfe6ff99;
-      font-size:0.9rem;
-      margin-bottom:6px;
-    }
-
-    .confession img {
-      max-width:100%;
-      border-radius:8px;
-      margin-top:8px;
-      display:block;
-    }
-
-    .hint {
-      color:#e6e6e6aa;
-      font-size:0.9rem;
-      margin-top:6px;
-    }
-
+    .like-btn.liked { color:#ffb3c1; }
     footer {
-      text-align:center;
-      color:#eee;
-      opacity:0.8;
-      padding:14px 0;
-      margin-top:20px;
-      font-size:0.9rem;
+      text-align:center; padding:16px; font-size:0.9rem; color:#fff;
+      background:rgba(255,255,255,0.05); border-top:1px solid rgba(255,255,255,0.1);
+      position:relative; bottom:0; left:0;
     }
+    @media(max-width:600px){ .row{flex-direction:column;} .btn{width:100%;} .upload-label{width:100%;text-align:center;} }
 
-    @media (max-width:600px){
-      .row { flex-direction:column; }
-      .btn { width:100%; }
-      .upload-label{width:100%; text-align:center;}
+    /* Overlay đăng nhập */
+    #loginOverlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.75);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 999;
+      flex-direction: column;
+      text-align: center;
+    }
+    #loginOverlay .box {
+      background: rgba(255,255,255,0.1);
+      padding: 30px;
+      border-radius: 14px;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.4);
+    }
+    #loginOverlay h2 {
+      font-size: 1.3rem;
+      margin-bottom: 12px;
+    }
+    #loginOverlay button {
+      background: var(--accent);
+      color: #fff;
+      border: none;
+      padding: 10px 18px;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
     }
   </style>
 </head>
 <body>
-  <header>
-    <h1>✨ GIA ĐỊNH UNIVERSITY CONFESSION ✨</h1>
-  </header>
+
+  <!-- Overlay hiển thị khi chưa đăng nhập -->
+  <div id="loginOverlay" style="display:none;">
+    <div class="box">
+      <h2>🔒 Bạn cần đăng nhập để xem confession</h2>
+      <button onclick="window.location.href='login.html'">Đăng nhập ngay</button>
+    </div>
+  </div>
+
+  <header><h1>✨ GIA ĐỊNH UNIVERSITY CONFESSION ✨</h1></header>
 
   <main>
     <div class="card">
       <h3>Viết Confession mới</h3>
-
-      <input id="senderName" type="text" placeholder="Nhập tên (hoặc để trống để ẩn danh)" />
       <textarea id="newConfession" placeholder="Nhập confession của bạn..."></textarea>
-
       <div class="row">
         <div class="left">
           <label class="upload-label">
             📷 Chọn ảnh
             <input id="confessionImage" type="file" accept="image/*" style="display:none;" />
           </label>
-          <div id="imageInfo" class="hint" style="margin-top:8px;">(Ảnh không bắt buộc — tối đa ~10MB)</div>
+          <div id="imageInfo" class="hint">(Ảnh không bắt buộc — tối đa ~10MB)</div>
           <img id="imagePreview" alt="preview">
         </div>
-
-        <div style="min-width:150px; display:flex; flex-direction:column; gap:8px;">
+        <div style="min-width:150px;display:flex;flex-direction:column;gap:8px;">
           <button id="addConfessionBtn" class="btn">Gửi</button>
-          <div id="statusWrap" style="display:flex; align-items:center; gap:8px; justify-content:center;">
-            <div id="loader" class="loader" style="display:none;"></div>
-            <div id="statusText" style="font-size:0.95rem; color:#fff; opacity:0.9;"></div>
-          </div>
+          <div id="statusText" style="font-size:0.95rem;color:#fff;opacity:0.9;text-align:center;"></div>
         </div>
       </div>
-
-      <div class="hint" style="margin-top:12px;">Lưu ý: Ảnh được upload lên ImgBB (miễn phí), nội dung được lưu trên Firebase Firestore.</div>
     </div>
 
-    <div class="card confession-list" id="confessionContainer">
+    <div class="card">
       <h3>Confession mới nhất</h3>
       <div id="listInner"></div>
     </div>
@@ -211,11 +139,17 @@
 
   <footer>Viết bởi Bảo Long - GDU Confession</footer>
 
-  <!-- Firebase SDK (v8) -->
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
 
   <script>
+    // --- KIỂM TRA ĐĂNG NHẬP TRƯỚC KHI XEM TRANG ---
+    const currentUser = localStorage.getItem("username");
+    if (!currentUser) {
+      document.getElementById("loginOverlay").style.display = "flex";
+      document.body.style.overflow = "hidden";
+    }
+
     const IMGBB_API_KEY = "46ccb22e2eddd283211566a5482eef7b";
     const firebaseConfig = {
       apiKey: "AIzaSyACpNff8xGZ-FNmngsDA7mRk8m7G_gFXlo",
@@ -223,143 +157,98 @@
       projectId: "newweb-97f09",
       storageBucket: "newweb-97f09.appspot.com"
     };
-
     firebase.initializeApp(firebaseConfig);
     const db = firebase.firestore();
 
     const fileInput = document.getElementById("confessionImage");
     const preview = document.getElementById("imagePreview");
-    const imageInfo = document.getElementById("imageInfo");
     const btn = document.getElementById("addConfessionBtn");
-    const loader = document.getElementById("loader");
     const statusText = document.getElementById("statusText");
     const listInner = document.getElementById("listInner");
     let imageFile = null;
 
-    fileInput.addEventListener("change", (e) => {
+    fileInput.addEventListener("change", e => {
       const f = e.target.files[0];
-      if (!f) {
-        imageFile = null;
-        preview.style.display = "none";
-        imageInfo.textContent = "(Ảnh không bắt buộc — tối đa ~10MB)";
-        return;
-      }
-      if (f.size > 10 * 1024 * 1024) {
-        alert("Ảnh quá lớn (>10MB). Vui lòng chọn ảnh nhỏ hơn.");
-        fileInput.value = "";
-        return;
-      }
+      if (!f) { preview.style.display="none"; return; }
+      if (f.size > 10*1024*1024) { alert("Ảnh quá lớn (>10MB)!"); return; }
       imageFile = f;
       preview.src = URL.createObjectURL(f);
       preview.style.display = "block";
-      imageInfo.textContent = `Đã chọn: ${f.name} (${Math.round(f.size/1024)} KB)`;
+      document.getElementById("imageInfo").textContent = `Đã chọn: ${f.name}`;
     });
 
-    function fileToBase64(file) {
-      return new Promise((resolve, reject) => {
-        const reader = new FileReader();
-        reader.onerror = () => reject(new Error("Không đọc được file ảnh"));
-        reader.onload = () => {
-          const result = reader.result;
-          const idx = result.indexOf("base64,");
-          resolve(idx === -1 ? result : result.substring(idx + 7));
-        };
-        reader.readAsDataURL(file);
-      });
-    }
-
     async function uploadToImgBB(file) {
-      if (!file) return "";
-      const base64 = await fileToBase64(file);
+      const base64 = await new Promise((res,rej)=>{
+        const r = new FileReader();
+        r.onload = ()=>res(r.result.split(",")[1]); r.onerror=rej;
+        r.readAsDataURL(file);
+      });
       const form = new FormData();
       form.append("image", base64);
-      const url = `https://api.imgbb.com/1/upload?key=${encodeURIComponent(IMGBB_API_KEY)}`;
-      const res = await fetch(url, { method: "POST", body: form });
+      const res = await fetch(`https://api.imgbb.com/1/upload?key=${IMGBB_API_KEY}`, {method:"POST", body:form});
       const json = await res.json();
-      if (!res.ok || json.status !== 200) {
-        const errMsg = json?.error?.message || JSON.stringify(json);
-        throw new Error("ImgBB upload failed: " + errMsg);
-      }
+      if (!res.ok || json.status !== 200) throw new Error("Upload thất bại");
       return json.data.url;
     }
 
-    btn.addEventListener("click", async () => {
+    btn.onclick = async () => {
       const text = document.getElementById("newConfession").value.trim();
-      const author = document.getElementById("senderName").value.trim() || "Ẩn danh";
-      if (!text && !imageFile) {
-        alert("Vui lòng nhập confession hoặc chọn ảnh!");
-        return;
-      }
+      if (!text && !imageFile) return alert("Vui lòng nhập nội dung hoặc chọn ảnh!");
+      if (!currentUser) return alert("Bạn cần đăng nhập để gửi bài!");
 
       btn.disabled = true;
-      loader.style.display = "inline-block";
-      statusText.textContent = "Đang xử lý...";
+      statusText.textContent = "Đang gửi...";
 
       try {
         let imageUrl = "";
-        if (imageFile) {
-          statusText.textContent = "Đang tải ảnh lên ImgBB...";
-          imageUrl = await uploadToImgBB(imageFile);
-        }
+        if (imageFile) imageUrl = await uploadToImgBB(imageFile);
 
-        statusText.textContent = "Đang lưu confession...";
         await db.collection("confessions").add({
-          text,
-          author,
-          imageUrl: imageUrl || "",
-          likes: 0,
-          comments: [],
+          text, author: currentUser, imageUrl,
+          likes: [], comments: [],
           createdAt: firebase.firestore.FieldValue.serverTimestamp()
         });
 
         document.getElementById("newConfession").value = "";
-        document.getElementById("senderName").value = "";
-        preview.style.display = "none";
-        fileInput.value = "";
+        fileInput.value = ""; preview.style.display = "none";
         imageFile = null;
+        statusText.textContent = "Đăng thành công 🎉";
+        setTimeout(()=>statusText.textContent="",2000);
+      } catch(e){ alert("Lỗi: "+e.message); }
+      btn.disabled = false;
+    };
 
-        statusText.textContent = "Gửi thành công 🎉";
-        setTimeout(() => statusText.textContent = "", 2000);
-      } catch (err) {
-        console.error(err);
-        alert("Lỗi khi gửi: " + (err.message || err));
-        statusText.textContent = "Lỗi. Kiểm tra console.";
-      } finally {
-        loader.style.display = "none";
-        btn.disabled = false;
-      }
-    });
-
-    db.collection("confessions").orderBy("createdAt","desc").onSnapshot(snapshot => {
-      listInner.innerHTML = "";
-      snapshot.forEach(doc => {
-        const d = doc.data();
-        const wrapper = document.createElement("div");
-        wrapper.className = "confession";
-        const timeText = d.createdAt?.toDate ? d.createdAt.toDate().toLocaleString() : "";
-        wrapper.innerHTML = `
-          <div class="meta">👤 <strong>${escapeHtml(d.author || "Ẩn danh")}</strong> • <span style="opacity:0.8">${timeText}</span></div>
-          <div class="text">${escapeHtml(d.text || "")}</div>
-          ${d.imageUrl ? `<img src="${escapeAttr(d.imageUrl)}" alt="image">` : ""}
+    db.collection("confessions").orderBy("createdAt","desc").onSnapshot(snap=>{
+      listInner.innerHTML="";
+      snap.forEach(doc=>{
+        const d=doc.data();
+        const id=doc.id;
+        const liked = d.likes?.includes(currentUser);
+        const div=document.createElement("div");
+        div.className="confession";
+        div.innerHTML=`
+          <div class="meta">👤 <strong>${d.author}</strong> • ${d.createdAt?.toDate?.().toLocaleString()||""}</div>
+          <div class="text">${d.text}</div>
+          ${d.imageUrl?`<img src="${d.imageUrl}">`:""}
+          <div class="actions">
+            <button class="like-btn ${liked?"liked":""}" onclick="toggleLike('${id}', ${JSON.stringify(d.likes||[]).replace(/"/g,'&quot;')})">
+              ❤️ ${d.likes?.length||0}
+            </button>
+            <span style="font-size:0.85rem;opacity:0.8;">${(d.likes||[]).join(', ')}</span>
+          </div>
         `;
-        listInner.appendChild(wrapper);
+        listInner.appendChild(div);
       });
-    }, err => {
-      console.error("Realtime read error:", err);
-      listInner.innerHTML = "<div style='color:#ffd6d6'>Không thể đọc dữ liệu. Kiểm tra console.</div>";
     });
 
-    function escapeHtml(str) {
-      if (!str) return "";
-      return String(str)
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;")
-        .replace(/"/g, "&quot;")
-        .replace(/'/g, "&#039;");
+    async function toggleLike(id, likes){
+      const ref=db.collection("confessions").doc(id);
+      if(likes.includes(currentUser)){
+        await ref.update({likes: firebase.firestore.FieldValue.arrayRemove(currentUser)});
+      }else{
+        await ref.update({likes: firebase.firestore.FieldValue.arrayUnion(currentUser)});
+      }
     }
-    function escapeAttr(s) { return escapeHtml(s); }
   </script>
 </body>
 </html>
-
