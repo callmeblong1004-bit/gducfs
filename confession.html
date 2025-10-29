@@ -14,7 +14,13 @@
       color:#fff;
     }
 
-    .header { width:100%; max-width:700px; margin-bottom:20px; display:flex; justify-content:space-between; align-items:center;}
+    .header {
+      width:100%; max-width:700px;
+      margin-bottom:20px;
+      display:flex; justify-content:space-between; align-items:center;
+      flex-wrap: wrap; /* Responsive: xuống dòng khi màn hình nhỏ */
+      gap:10px;
+    }
     .header h1 { font-size:1.8rem; }
     .btn { padding:10px 20px; border-radius:12px; border:none; background:rgba(255,255,255,0.2); color:#fff; font-weight:600; cursor:pointer; transition:0.3s; }
     .btn:hover { background:rgba(255,255,255,0.35); }
@@ -37,13 +43,22 @@
     .post-actions button:hover { background:rgba(255,255,255,0.25); }
 
     .credit { margin-top:40px; font-size:0.8rem; color:rgba(255,255,255,0.7);}
+
+    /* Responsive */
+    @media(max-width:480px){
+      .header { flex-direction: column; align-items:flex-start; gap:10px; }
+      .header h1 { font-size:1.5rem; }
+      .btn { font-size:0.85rem; width:100%; text-align:center; }
+      .new-post { padding:15px; }
+      .new-post h3 { font-size:1.2rem; }
+    }
   </style>
 </head>
 <body>
 
 <div class="header">
   <h1>GDU Confession</h1>
-  <div>
+  <div class="header-buttons">
     <button class="btn" onclick="window.location.href='index.html'">Trang chủ</button>
     <button class="btn" id="logoutBtn">Đăng xuất</button>
   </div>
@@ -70,7 +85,7 @@
   // Kiểm tra login
   const currentUser = JSON.parse(localStorage.getItem('currentUser'));
   if(!currentUser || localStorage.getItem('loggedIn') !== 'true'){
-    alert('Bạn cần đăng nhập để vào Confession!');
+    alert('Bạn cần đăng nhập để vào trang này!');
     window.location.href = 'login.html';
   }
 
